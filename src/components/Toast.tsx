@@ -68,7 +68,7 @@ export const Toast: React.FC<ToastProps> = ({
 const styles = StyleSheet.create({
     toast: {
         position: "absolute",
-        top: hp(6),
+        top: hp(1.5),
         left: wp(5),
         right: wp(5),
         height: hp(5),
