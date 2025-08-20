@@ -77,10 +77,14 @@ src/
 
 ## Roadmap
 
-- [ ] Basic flashcard component
-- [ ] Hiragana and katakana data
-- [ ] Progress tracking
-- [ ] Navigation between screens
+- [x] Basic flashcard component
+- [x] Hiragana and katakana data
+- [x] Progress tracking
+- [x] Navigation between screens
+- [x] Responsive design
+- [x] Shuffle functionality
+- [ ] Persistent progress storage
+- [ ] Progress statistics screen
 - [ ] Kanji support (future)
 - [ ] Spaced repetition (future)
 
