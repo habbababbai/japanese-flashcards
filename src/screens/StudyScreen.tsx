@@ -77,63 +77,70 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.progressText}>
-                    {currentIndex + 1} / {kanaList.length}
-                </Text>
-            </View>
-
-            <View style={styles.cardContainer}>
-                <Flashcard
-                    kana={currentKana}
-                    onFlip={handleCardFlip}
-                    onAnswer={handleAnswer}
-                />
-            </View>
-
-            <View style={styles.navigationContainer}>
-                <TouchableOpacity
-                    style={[
-                        styles.navButton,
-                        currentIndex === 0 && styles.navButtonDisabled,
-                    ]}
-                    onPress={goToPrevious}
-                    disabled={currentIndex === 0}
-                >
-                    <Text
-                        style={[
-                            styles.navButtonText,
-                            currentIndex === 0 && styles.navButtonTextDisabled,
-                        ]}
-                    >
-                        ← Previous
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <Text style={styles.progressText}>
+                        {currentIndex + 1} / {kanaList.length}
                     </Text>
-                </TouchableOpacity>
+                </View>
 
-                <TouchableOpacity
-                    style={[
-                        styles.navButton,
-                        isLastCard && styles.navButtonDisabled,
-                    ]}
-                    onPress={goToNext}
-                    disabled={isLastCard}
-                >
-                    <Text
+                <View style={styles.cardContainer}>
+                    <Flashcard
+                        kana={currentKana}
+                        onFlip={handleCardFlip}
+                        onAnswer={handleAnswer}
+                    />
+                </View>
+
+                <View style={styles.navigationContainer}>
+                    <TouchableOpacity
                         style={[
-                            styles.navButtonText,
-                            isLastCard && styles.navButtonTextDisabled,
+                            styles.navButton,
+                            currentIndex === 0 && styles.navButtonDisabled,
                         ]}
+                        onPress={goToPrevious}
+                        disabled={currentIndex === 0}
                     >
-                        Next →
-                    </Text>
-                </TouchableOpacity>
+                        <Text
+                            style={[
+                                styles.navButtonText,
+                                currentIndex === 0 &&
+                                    styles.navButtonTextDisabled,
+                            ]}
+                        >
+                            ← Previous
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={[
+                            styles.navButton,
+                            isLastCard && styles.navButtonDisabled,
+                        ]}
+                        onPress={goToNext}
+                        disabled={isLastCard}
+                    >
+                        <Text
+                            style={[
+                                styles.navButtonText,
+                                isLastCard && styles.navButtonTextDisabled,
+                            ]}
+                        >
+                            Next →
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    safeArea: {
+        backgroundColor: "white",
+        flex: 1,
+    },
     cardContainer: {
         flex: 1,
         justifyContent: "center",
