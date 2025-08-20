@@ -17,12 +17,18 @@ import { Kana } from "../types";
 interface FlashcardProps {
     kana: Kana;
     onFlip?: () => void;
+    onAnswer?: (isCorrect: boolean) => void;
 }
 
 const { width } = Dimensions.get("window");
 
-export const Flashcard: React.FC<FlashcardProps> = ({ kana, onFlip }) => {
+export const Flashcard: React.FC<FlashcardProps> = ({
+    kana,
+    onFlip,
+    onAnswer,
+}) => {
     const [isFlipped, setIsFlipped] = useState(false);
+    const [showAnswerButtons, setShowAnswerButtons] = useState(false);
     const flipAnimation = useSharedValue(0);
 
     const handleFlip = () => {
@@ -32,7 +38,24 @@ export const Flashcard: React.FC<FlashcardProps> = ({ kana, onFlip }) => {
             stiffness: 100,
         });
         setIsFlipped(!isFlipped);
+
+        if (!isFlipped) {
+            setShowAnswerButtons(true);
+        } else {
+            setShowAnswerButtons(false);
+        }
+
         onFlip?.();
+    };
+
+    const handleAnswer = (isCorrect: boolean) => {
+        onAnswer?.(isCorrect);
+        setShowAnswerButtons(false);
+        flipAnimation.value = withSpring(0, {
+            damping: 15,
+            stiffness: 100,
+        });
+        setIsFlipped(false);
     };
 
     const frontAnimatedStyle = useAnimatedStyle(() => {
@@ -53,7 +76,6 @@ export const Flashcard: React.FC<FlashcardProps> = ({ kana, onFlip }) => {
         <View style={styles.container}>
             <TouchableOpacity onPress={handleFlip} activeOpacity={0.9}>
                 <View style={styles.cardContainer}>
-                    {/* Front of card - shows hiragana */}
                     <Animated.View
                         style={[
                             styles.card,
@@ -62,10 +84,10 @@ export const Flashcard: React.FC<FlashcardProps> = ({ kana, onFlip }) => {
                         ]}
                     >
                         <Text style={styles.kanaText}>{kana.character}</Text>
-                        <Text style={styles.hintText}>Tap to see romaji</Text>
+                        <Text style={styles.hintText}>
+                            What does this sound like?
+                        </Text>
                     </Animated.View>
-
-                    {/* Back of card - shows romaji */}
                     <Animated.View
                         style={[
                             styles.card,
@@ -74,10 +96,30 @@ export const Flashcard: React.FC<FlashcardProps> = ({ kana, onFlip }) => {
                         ]}
                     >
                         <Text style={styles.romajiText}>{kana.romaji}</Text>
-                        <Text style={styles.hintText}>Tap to flip back</Text>
+                        <Text style={styles.hintText}>Did you know it?</Text>
                     </Animated.View>
                 </View>
             </TouchableOpacity>
+            {showAnswerButtons && (
+                <View style={styles.answerButtons}>
+                    <TouchableOpacity
+                        style={[styles.answerButton, styles.incorrectButton]}
+                        onPress={() => handleAnswer(false)}
+                    >
+                        <Text style={styles.answerButtonText}>
+                            ❌ I didn't know it
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.answerButton, styles.correctButton]}
+                        onPress={() => handleAnswer(true)}
+                    >
+                        <Text style={styles.answerButtonText}>
+                            ✅ I knew it!
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )}
         </View>
     );
 };
@@ -116,7 +158,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#4A90E2",
     },
     cardBack: {
-        backgroundColor: "#50C878",
+        backgroundColor: "#FFC107",
     },
     kanaText: {
         fontSize: 120,
@@ -137,5 +179,46 @@ const styles = StyleSheet.create({
         color: "rgba(255, 255, 255, 0.8)",
         textAlign: "center",
         fontStyle: "italic",
+    },
+    answerButtons: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        marginTop: 30,
+        paddingHorizontal: 20,
+        gap: 15,
+    },
+    answerButton: {
+        flex: 1,
+        paddingVertical: 18,
+        paddingHorizontal: 20,
+        borderRadius: 15,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 6,
+        elevation: 8,
+        minHeight: 60,
+        justifyContent: "center",
+    },
+    correctButton: {
+        backgroundColor: "#4CAF50",
+        borderWidth: 2,
+        borderColor: "#45A049",
+    },
+    incorrectButton: {
+        backgroundColor: "#F44336",
+        borderWidth: 2,
+        borderColor: "#D32F2F",
+    },
+    answerButtonText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "700",
+        textAlign: "center",
+        lineHeight: 20,
     },
 });
