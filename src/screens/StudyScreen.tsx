@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     Text,
@@ -15,19 +15,35 @@ interface StudyScreenProps {
     kanaList: Kana[];
     onComplete?: (progress: StudyProgress[]) => void;
     onBack?: () => void;
+    title?: string;
 }
 
 export const StudyScreen: React.FC<StudyScreenProps> = ({
     kanaList,
     onComplete,
     onBack,
+    title = "Study",
 }) => {
+    const [shuffledKanaList, setShuffledKanaList] = useState<Kana[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [progress, setProgress] = useState<StudyProgress[]>([]);
     const [showAnswer, setShowAnswer] = useState(false);
 
-    const currentKana = kanaList[currentIndex];
-    const isLastCard = currentIndex === kanaList.length - 1;
+    // Initialize with shuffled list
+    useEffect(() => {
+        shuffleKanaList();
+    }, [kanaList]);
+
+    const shuffleKanaList = () => {
+        const shuffled = [...kanaList].sort(() => Math.random() - 0.5);
+        setShuffledKanaList(shuffled);
+        setCurrentIndex(0);
+        setProgress([]);
+        setShowAnswer(false);
+    };
+
+    const currentKana = shuffledKanaList[currentIndex];
+    const isLastCard = currentIndex === shuffledKanaList.length - 1;
 
     const handleCardFlip = () => {
         setShowAnswer(true);
@@ -48,7 +64,7 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
             onComplete?.(progress);
             Alert.alert(
                 "Study Session Complete! 🎉",
-                `You reviewed ${kanaList.length} hiragana characters.`,
+                `You reviewed ${shuffledKanaList.length} ${title.toLowerCase()} characters.`,
                 [
                     {
                         text: "OK",
@@ -70,7 +86,7 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
     };
 
     const goToNext = () => {
-        if (currentIndex < kanaList.length - 1) {
+        if (currentIndex < shuffledKanaList.length - 1) {
             setCurrentIndex(currentIndex + 1);
             setShowAnswer(false);
         }
@@ -80,9 +96,18 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.progressText}>
-                        {currentIndex + 1} / {kanaList.length}
-                    </Text>
+                    <View style={styles.headerContent}>
+                        <Text style={styles.titleText}>{title}</Text>
+                        <Text style={styles.progressText}>
+                            {currentIndex + 1} / {shuffledKanaList.length}
+                        </Text>
+                    </View>
+                    <TouchableOpacity
+                        style={styles.shuffleButton}
+                        onPress={shuffleKanaList}
+                    >
+                        <Text style={styles.shuffleButtonText}>🔀 Shuffle</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.cardContainer}>
@@ -155,8 +180,12 @@ const styles = StyleSheet.create({
         borderBottomColor: "#e0e0e0",
         borderBottomWidth: 1,
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "space-between",
         padding: spacing.md,
+    },
+    headerContent: {
+        alignItems: "center",
+        flex: 1,
     },
     navButton: {
         alignItems: "center",
@@ -189,6 +218,23 @@ const styles = StyleSheet.create({
     progressText: {
         color: "#333",
         fontSize: fontSize.sm,
+        fontWeight: "600",
+    },
+    titleText: {
+        color: "#333",
+        fontSize: fontSize.lg,
+        fontWeight: "700",
+        marginBottom: spacing.xs,
+    },
+    shuffleButton: {
+        backgroundColor: "#4A90E2",
+        borderRadius: hp(1),
+        paddingHorizontal: spacing.md,
+        paddingVertical: spacing.sm,
+    },
+    shuffleButtonText: {
+        color: "white",
+        fontSize: fontSize.xs,
         fontWeight: "600",
     },
     skipButton: {
