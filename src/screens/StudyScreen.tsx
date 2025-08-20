@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Flashcard } from "../components/Flashcard";
 import { Kana, StudyProgress } from "../types";
+import { spacing, fontSize, hp, wp } from "../utils/responsive";
 
 interface StudyScreenProps {
     kanaList: Kana[];
@@ -133,67 +134,67 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#f5f5f5",
-    },
-    header: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 20,
-        backgroundColor: "white",
-        borderBottomWidth: 1,
-        borderBottomColor: "#e0e0e0",
-    },
-    progressText: {
-        fontSize: 16,
-        fontWeight: "600",
-        color: "#333",
-    },
     cardContainer: {
         flex: 1,
         justifyContent: "center",
     },
-    navigationContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+    container: {
+        backgroundColor: "#f5f5f5",
+        flex: 1,
+    },
+    header: {
         alignItems: "center",
-        padding: 20,
         backgroundColor: "white",
-        borderTopWidth: 1,
-        borderTopColor: "#e0e0e0",
+        borderBottomColor: "#e0e0e0",
+        borderBottomWidth: 1,
+        flexDirection: "row",
+        justifyContent: "center",
+        padding: spacing.md,
     },
     navButton: {
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        borderRadius: 8,
-        backgroundColor: "#4A90E2",
-        minWidth: 100,
         alignItems: "center",
+        backgroundColor: "#4A90E2",
+        borderRadius: hp(1),
+        minWidth: wp(25),
+        paddingHorizontal: spacing.md,
+        paddingVertical: spacing.sm,
     },
     navButtonDisabled: {
         backgroundColor: "#ccc",
     },
     navButtonText: {
         color: "white",
-        fontSize: 14,
+        fontSize: fontSize.xs,
         fontWeight: "600",
     },
     navButtonTextDisabled: {
         color: "#999",
     },
-    skipButton: {
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        borderRadius: 8,
-        backgroundColor: "#FF9800",
-        minWidth: 80,
+    navigationContainer: {
         alignItems: "center",
+        backgroundColor: "white",
+        borderTopColor: "#e0e0e0",
+        borderTopWidth: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        padding: spacing.md,
+    },
+    progressText: {
+        color: "#333",
+        fontSize: fontSize.sm,
+        fontWeight: "600",
+    },
+    skipButton: {
+        alignItems: "center",
+        backgroundColor: "#FF9800",
+        borderRadius: hp(1),
+        minWidth: wp(20),
+        paddingHorizontal: spacing.md,
+        paddingVertical: spacing.sm,
     },
     skipButtonText: {
         color: "white",
-        fontSize: 14,
+        fontSize: fontSize.xs,
         fontWeight: "600",
     },
 });
