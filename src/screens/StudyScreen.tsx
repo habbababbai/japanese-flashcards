@@ -45,6 +45,21 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
     const currentKana = shuffledKanaList[currentIndex];
     const isLastCard = currentIndex === shuffledKanaList.length - 1;
 
+    if (!currentKana) {
+        return (
+            <SafeAreaView style={styles.safeArea}>
+                <View style={styles.container}>
+                    <View style={styles.header}>
+                        <View style={styles.headerContent}>
+                            <Text style={styles.titleText}>{title}</Text>
+                            <Text style={styles.progressText}>Loading...</Text>
+                        </View>
+                    </View>
+                </View>
+            </SafeAreaView>
+        );
+    }
+
     const handleCardFlip = () => {
         setShowAnswer(true);
     };
