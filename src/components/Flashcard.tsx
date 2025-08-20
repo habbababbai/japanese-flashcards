@@ -13,6 +13,8 @@ import Animated, {
     interpolate,
 } from "react-native-reanimated";
 import { Kana } from "../types";
+import { Toast } from "./Toast";
+import { spacing, fontSize, hp, wp } from "../utils/responsive";
 
 interface FlashcardProps {
     kana: Kana;
@@ -29,6 +31,8 @@ export const Flashcard: React.FC<FlashcardProps> = ({
 }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [showAnswerButtons, setShowAnswerButtons] = useState(false);
+    const [showToast, setShowToast] = useState(false);
+    const [toastIsCorrect, setToastIsCorrect] = useState(false);
     const flipAnimation = useSharedValue(0);
 
     const handleFlip = () => {
@@ -49,6 +53,10 @@ export const Flashcard: React.FC<FlashcardProps> = ({
     };
 
     const handleAnswer = (isCorrect: boolean) => {
+        // Show toast
+        setToastIsCorrect(isCorrect);
+        setShowToast(true);
+
         onAnswer?.(isCorrect);
         setShowAnswerButtons(false);
         flipAnimation.value = withSpring(0, {
@@ -120,79 +128,26 @@ export const Flashcard: React.FC<FlashcardProps> = ({
                     </TouchableOpacity>
                 </View>
             )}
+
+            <Toast
+                isVisible={showToast}
+                isCorrect={toastIsCorrect}
+                onHide={() => setShowToast(false)}
+            />
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 20,
-    },
-    cardContainer: {
-        width: width - 40,
-        height: 400,
-        position: "relative",
-    },
-    card: {
-        width: "100%",
-        height: "100%",
-        borderRadius: 20,
-        padding: 30,
-        justifyContent: "center",
-        alignItems: "center",
-        position: "absolute",
-        backfaceVisibility: "hidden",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 8,
-    },
-    cardFront: {
-        backgroundColor: "#4A90E2",
-    },
-    cardBack: {
-        backgroundColor: "#FFC107",
-    },
-    kanaText: {
-        fontSize: 120,
-        fontWeight: "bold",
-        color: "white",
-        textAlign: "center",
-        marginBottom: 30,
-    },
-    romajiText: {
-        fontSize: 48,
-        fontWeight: "bold",
-        color: "white",
-        textAlign: "center",
-        marginBottom: 30,
-    },
-    hintText: {
-        fontSize: 16,
-        color: "rgba(255, 255, 255, 0.8)",
-        textAlign: "center",
-        fontStyle: "italic",
-    },
-    answerButtons: {
-        flexDirection: "row",
-        justifyContent: "space-around",
-        marginTop: 30,
-        paddingHorizontal: 20,
-        gap: 15,
-    },
     answerButton: {
-        flex: 1,
-        paddingVertical: 18,
-        paddingHorizontal: 20,
-        borderRadius: 15,
         alignItems: "center",
+        borderRadius: hp(2),
+        elevation: 8,
+        flex: 1,
+        justifyContent: "center",
+        minHeight: hp(7),
+        paddingHorizontal: spacing.md,
+        paddingVertical: spacing.md,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -200,25 +155,84 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.3,
         shadowRadius: 6,
-        elevation: 8,
-        minHeight: 60,
-        justifyContent: "center",
-    },
-    correctButton: {
-        backgroundColor: "#4CAF50",
-        borderWidth: 2,
-        borderColor: "#45A049",
-    },
-    incorrectButton: {
-        backgroundColor: "#F44336",
-        borderWidth: 2,
-        borderColor: "#D32F2F",
     },
     answerButtonText: {
         color: "white",
-        fontSize: 16,
+        fontSize: fontSize.sm,
         fontWeight: "700",
+        lineHeight: fontSize.sm * 1.25,
         textAlign: "center",
-        lineHeight: 20,
+    },
+    answerButtons: {
+        flexDirection: "row",
+        gap: spacing.md,
+        justifyContent: "space-around",
+        marginTop: spacing.lg,
+        paddingHorizontal: spacing.md,
+    },
+    card: {
+        alignItems: "center",
+        backfaceVisibility: "hidden",
+        borderRadius: hp(2.5),
+        elevation: 8,
+        height: "100%",
+        justifyContent: "center",
+        padding: hp(3.5),
+        position: "absolute",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        width: "100%",
+    },
+    cardBack: {
+        backgroundColor: "#FFC107",
+    },
+    cardContainer: {
+        height: hp(50),
+        position: "relative",
+        width: wp(90),
+    },
+    cardFront: {
+        backgroundColor: "#4A90E2",
+    },
+    container: {
+        alignItems: "center",
+        flex: 1,
+        justifyContent: "center",
+        padding: spacing.md,
+    },
+    correctButton: {
+        backgroundColor: "#4CAF50",
+        borderColor: "#45A049",
+        borderWidth: 2,
+    },
+    hintText: {
+        color: "rgba(255, 255, 255, 0.8)",
+        fontSize: fontSize.sm,
+        fontStyle: "italic",
+        textAlign: "center",
+    },
+    incorrectButton: {
+        backgroundColor: "#F44336",
+        borderColor: "#D32F2F",
+        borderWidth: 2,
+    },
+    kanaText: {
+        color: "white",
+        fontSize: fontSize.huge,
+        fontWeight: "bold",
+        marginBottom: spacing.lg,
+        textAlign: "center",
+    },
+    romajiText: {
+        color: "white",
+        fontSize: fontSize.xxl,
+        fontWeight: "bold",
+        marginBottom: spacing.lg,
+        textAlign: "center",
     },
 });

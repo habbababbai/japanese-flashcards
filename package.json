@@ -1,25 +1,35 @@
 {
-  "name": "japanese-flashcards",
-  "version": "1.0.0",
-  "main": "index.ts",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
-  },
-  "dependencies": {
-    "expo": "~53.0.20",
-    "expo-status-bar": "~2.2.3",
-    "react": "19.0.0",
-    "react-native": "0.79.5",
-    "react-native-reanimated": "3.17.4",
-    "react-native-worklets": "^0.4.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@types/react": "~19.0.10",
-    "typescript": "~5.8.3"
-  },
-  "private": true
+    "name": "japanese-flashcards",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "scripts": {
+        "start": "expo start",
+        "android": "expo start --android",
+        "ios": "expo start --ios",
+        "web": "expo start --web"
+    },
+    "dependencies": {
+        "expo": "~53.0.20",
+        "expo-status-bar": "~2.2.3",
+        "react": "19.0.0",
+        "react-native": "0.79.5",
+        "react-native-reanimated": "3.17.4",
+        "react-native-responsive-screen": "^1.4.2",
+        "react-native-worklets": "^0.4.1"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.25.2",
+        "@types/react": "~19.0.10",
+        "@typescript-eslint/eslint-plugin": "^8.40.0",
+        "@typescript-eslint/parser": "^8.40.0",
+        "eslint": "^9.33.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.4",
+        "eslint-plugin-react": "^7.37.5",
+        "eslint-plugin-react-hooks": "^5.2.0",
+        "eslint-plugin-react-native": "^5.0.0",
+        "prettier": "^3.6.2",
+        "typescript": "~5.8.3"
+    },
+    "private": true
 }

@@ -2,7 +2,7 @@ export interface Kana {
     id: string;
     character: string;
     romaji: string;
-    type: "hiragana" | "katakana";
+    type: 'hiragana' | 'katakana';
     correctCount: number;
     incorrectCount: number;
     lastReviewed?: Date;
@@ -10,7 +10,7 @@ export interface Kana {
 
 export interface StudySession {
     id: string;
-    kanaType: "hiragana" | "katakana";
+    kanaType: 'hiragana' | 'katakana';
     startTime: Date;
     endTime?: Date;
     cardsReviewed: number;
