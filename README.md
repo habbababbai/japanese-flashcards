@@ -4,26 +4,29 @@ A React Native flashcard app for learning Japanese hiragana and katakana charact
 
 ## Features
 
--   Interactive flashcard flipping
--   Hiragana and katakana learning modes
--   Progress tracking with mistake counting
--   Clean, intuitive UI
+- Interactive flashcard flipping
+- Hiragana and katakana learning modes
+- Progress tracking with mistake counting
+- Clean, intuitive UI
 
 ## Tech Stack
 
--   React Native with Expo
--   TypeScript
--   React Navigation (planned)
+- React Native with Expo
+- TypeScript
+- React Native Reanimated
+- React Native Responsive Screen
+- ESLint + Prettier
+- React Navigation (planned)
 
 ## Getting Started
 
 ### Prerequisites
 
--   Node.js (v16 or higher)
--   npm or yarn
--   Expo CLI (`npm install -g @expo/cli`)
--   iOS Simulator (Xcode) or Android Emulator (Android Studio) - optional
--   Expo Go app on your phone - for mobile testing
+- Node.js (v16 or higher)
+- npm or yarn
+- Expo CLI (`npm install -g @expo/cli`)
+- iOS Simulator (Xcode) or Android Emulator (Android Studio) - optional
+- Expo Go app on your phone - for mobile testing
 
 ### Installation
 
@@ -50,10 +53,10 @@ yarn start
 
 After running `yarn start`, you'll see several options:
 
--   **Press 'i'** - Open iOS simulator
--   **Press 'a'** - Open Android emulator
--   **Press 'w'** - Open in web browser
--   **Scan QR code** - Open on your phone with Expo Go app
+- **Press 'i'** - Open iOS simulator
+- **Press 'a'** - Open Android emulator
+- **Press 'w'** - Open in web browser
+- **Scan QR code** - Open on your phone with Expo Go app
 
 ## Project Structure
 
@@ -68,18 +71,18 @@ src/
 
 ## Development
 
--   **Main entry point**: `App.tsx`
--   **TypeScript config**: `tsconfig.json`
--   **Expo config**: `app.json`
+- **Main entry point**: `App.tsx`
+- **TypeScript config**: `tsconfig.json`
+- **Expo config**: `app.json`
 
 ## Roadmap
 
--   [ ] Basic flashcard component
--   [ ] Hiragana and katakana data
--   [ ] Progress tracking
--   [ ] Navigation between screens
--   [ ] Kanji support (future)
--   [ ] Spaced repetition (future)
+- [ ] Basic flashcard component
+- [ ] Hiragana and katakana data
+- [ ] Progress tracking
+- [ ] Navigation between screens
+- [ ] Kanji support (future)
+- [ ] Spaced repetition (future)
 
 ## Contributing
 
