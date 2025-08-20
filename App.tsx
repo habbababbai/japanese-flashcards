@@ -1,7 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { MainNavigator } from './src/navigation/MainNavigator';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { MainNavigator } from "./src/navigation/MainNavigator";
 
 export default function App() {
     return (
@@ -16,7 +16,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#f5f5f5',
+        backgroundColor: "#f5f5f5",
         flex: 1,
     },
 });
