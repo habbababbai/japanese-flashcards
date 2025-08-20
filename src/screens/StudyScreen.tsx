@@ -10,12 +10,14 @@ import {
 import { Flashcard } from "../components/Flashcard";
 import { Kana, StudyProgress } from "../types";
 import { spacing, fontSize, hp, wp } from "../utils/responsive";
+import { useStorage } from "../hooks/useStorage";
 
 interface StudyScreenProps {
     kanaList: Kana[];
     onComplete?: (progress: StudyProgress[]) => void;
     onBack?: () => void;
     title?: string;
+    isShuffled?: boolean;
 }
 
 export const StudyScreen: React.FC<StudyScreenProps> = ({
@@ -23,16 +25,26 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
     onComplete,
     onBack,
     title = "Study",
+    isShuffled = true,
 }) => {
+    const { saveSession, saveProgress } = useStorage();
+
     const [shuffledKanaList, setShuffledKanaList] = useState<Kana[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [progress, setProgress] = useState<StudyProgress[]>([]);
     const [showAnswer, setShowAnswer] = useState(false);
 
-    // Initialize with shuffled list
+    // Initialize with shuffled or ordered list
     useEffect(() => {
-        shuffleKanaList();
-    }, [kanaList]);
+        if (isShuffled) {
+            shuffleKanaList();
+        } else {
+            setShuffledKanaList([...kanaList]);
+            setCurrentIndex(0);
+            setProgress([]);
+            setShowAnswer(false);
+        }
+    }, [kanaList, isShuffled]);
 
     const shuffleKanaList = () => {
         const shuffled = [...kanaList].sort(() => Math.random() - 0.5);
@@ -72,11 +84,29 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
             timestamp: new Date(),
         };
 
+        // Save progress to storage
+        saveProgress(newProgress);
         setProgress([...progress, newProgress]);
 
         if (isLastCard) {
             // Study session complete
-            onComplete?.(progress);
+            const endTime = new Date();
+            const finalProgress = [...progress, newProgress];
+
+            // Save session to storage
+            const session = {
+                id: Date.now().toString(),
+                kanaType: title.toLowerCase() as "hiragana" | "katakana",
+                startTime: new Date(),
+                endTime,
+                cardsReviewed: finalProgress.length,
+                correctAnswers: finalProgress.filter((p) => p.isCorrect).length,
+                incorrectAnswers: finalProgress.filter((p) => !p.isCorrect)
+                    .length,
+            };
+            saveSession(session);
+
+            onComplete?.(finalProgress);
             Alert.alert(
                 "Study Session Complete! 🎉",
                 `You reviewed ${shuffledKanaList.length} ${title.toLowerCase()} characters.`,
@@ -117,12 +147,6 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
                             {currentIndex + 1} / {shuffledKanaList.length}
                         </Text>
                     </View>
-                    <TouchableOpacity
-                        style={styles.shuffleButton}
-                        onPress={shuffleKanaList}
-                    >
-                        <Text style={styles.shuffleButtonText}>🔀 Shuffle</Text>
-                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.cardContainer}>
@@ -131,45 +155,6 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
                         onFlip={handleCardFlip}
                         onAnswer={handleAnswer}
                     />
-                </View>
-
-                <View style={styles.navigationContainer}>
-                    <TouchableOpacity
-                        style={[
-                            styles.navButton,
-                            currentIndex === 0 && styles.navButtonDisabled,
-                        ]}
-                        onPress={goToPrevious}
-                        disabled={currentIndex === 0}
-                    >
-                        <Text
-                            style={[
-                                styles.navButtonText,
-                                currentIndex === 0 &&
-                                    styles.navButtonTextDisabled,
-                            ]}
-                        >
-                            ← Previous
-                        </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={[
-                            styles.navButton,
-                            isLastCard && styles.navButtonDisabled,
-                        ]}
-                        onPress={goToNext}
-                        disabled={isLastCard}
-                    >
-                        <Text
-                            style={[
-                                styles.navButtonText,
-                                isLastCard && styles.navButtonTextDisabled,
-                            ]}
-                        >
-                            Next →
-                        </Text>
-                    </TouchableOpacity>
                 </View>
             </View>
         </SafeAreaView>

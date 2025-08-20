@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     Text,
@@ -11,9 +11,10 @@ import Animated, {
     useAnimatedStyle,
     withSpring,
     interpolate,
+    withTiming,
+    runOnJS,
 } from "react-native-reanimated";
 import { Kana } from "../types";
-import { Toast } from "./Toast";
 import { spacing, fontSize, hp, wp } from "../utils/responsive";
 
 interface FlashcardProps {
@@ -31,9 +32,22 @@ export const Flashcard: React.FC<FlashcardProps> = ({
 }) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [showAnswerButtons, setShowAnswerButtons] = useState(false);
-    const [showToast, setShowToast] = useState(false);
-    const [toastIsCorrect, setToastIsCorrect] = useState(false);
+    const [userAnswer, setUserAnswer] = useState<boolean | null>(null);
     const flipAnimation = useSharedValue(0);
+    const answerButtonsOpacity = useSharedValue(1);
+    const cardScale = useSharedValue(1);
+    const cardOpacity = useSharedValue(1);
+
+    // Reset state when kana changes
+    useEffect(() => {
+        setIsFlipped(false);
+        setShowAnswerButtons(false);
+        setUserAnswer(null);
+        flipAnimation.value = 0;
+        answerButtonsOpacity.value = 1;
+        cardScale.value = 1;
+        cardOpacity.value = 1;
+    }, [kana.id]);
 
     const handleFlip = () => {
         const toValue = isFlipped ? 0 : 1;
@@ -53,17 +67,39 @@ export const Flashcard: React.FC<FlashcardProps> = ({
     };
 
     const handleAnswer = (isCorrect: boolean) => {
-        // Show toast
-        setToastIsCorrect(isCorrect);
-        setShowToast(true);
+        // Set user answer for color feedback
+        setUserAnswer(isCorrect);
 
-        onAnswer?.(isCorrect);
-        setShowAnswerButtons(false);
-        flipAnimation.value = withSpring(0, {
-            damping: 15,
-            stiffness: 100,
+        // Animate answer buttons fade out
+        answerButtonsOpacity.value = withTiming(0, {
+            duration: 500,
         });
-        setIsFlipped(false);
+
+        // Animate card scale down slightly
+        cardScale.value = withTiming(0.95, {
+            duration: 400,
+        });
+
+        // Animate card fade out
+        cardOpacity.value = withTiming(0, {
+            duration: 600,
+        });
+
+        // Call onAnswer after a longer delay to allow animations to complete
+        setTimeout(() => {
+            onAnswer?.(isCorrect);
+            setShowAnswerButtons(false);
+            flipAnimation.value = withSpring(0, {
+                damping: 15,
+                stiffness: 100,
+            });
+            setIsFlipped(false);
+
+            // Reset animations for next card
+            cardScale.value = withTiming(1, { duration: 400 });
+            answerButtonsOpacity.value = withTiming(1, { duration: 500 });
+            cardOpacity.value = withTiming(1, { duration: 600 });
+        }, 700);
     };
 
     const frontAnimatedStyle = useAnimatedStyle(() => {
@@ -80,36 +116,69 @@ export const Flashcard: React.FC<FlashcardProps> = ({
         };
     });
 
+    const cardAnimatedStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ scale: cardScale.value }],
+        };
+    });
+
+    const answerButtonsAnimatedStyle = useAnimatedStyle(() => {
+        return {
+            opacity: answerButtonsOpacity.value,
+        };
+    });
+
+    const cardContainerAnimatedStyle = useAnimatedStyle(() => {
+        return {
+            opacity: cardOpacity.value,
+        };
+    });
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={handleFlip} activeOpacity={0.9}>
-                <View style={styles.cardContainer}>
-                    <Animated.View
-                        style={[
-                            styles.card,
-                            styles.cardFront,
-                            frontAnimatedStyle,
-                        ]}
-                    >
-                        <Text style={styles.kanaText}>{kana.character}</Text>
-                        <Text style={styles.hintText}>
-                            What does this sound like?
-                        </Text>
-                    </Animated.View>
-                    <Animated.View
-                        style={[
-                            styles.card,
-                            styles.cardBack,
-                            backAnimatedStyle,
-                        ]}
-                    >
-                        <Text style={styles.romajiText}>{kana.romaji}</Text>
-                        <Text style={styles.hintText}>Did you know it?</Text>
-                    </Animated.View>
-                </View>
-            </TouchableOpacity>
+            <Animated.View
+                style={[cardAnimatedStyle, cardContainerAnimatedStyle]}
+            >
+                <TouchableOpacity onPress={handleFlip} activeOpacity={0.9}>
+                    <View style={styles.cardContainer}>
+                        <Animated.View
+                            style={[
+                                styles.card,
+                                styles.cardFront,
+                                frontAnimatedStyle,
+                            ]}
+                        >
+                            <Text style={styles.kanaText}>
+                                {kana.character}
+                            </Text>
+                            <Text style={styles.hintText}>
+                                What does this sound like?
+                            </Text>
+                        </Animated.View>
+                        <Animated.View
+                            style={[
+                                styles.card,
+                                styles.cardBack,
+                                backAnimatedStyle,
+                                userAnswer !== null && {
+                                    backgroundColor: userAnswer
+                                        ? "#4CAF50"
+                                        : "#F44336",
+                                },
+                            ]}
+                        >
+                            <Text style={styles.romajiText}>{kana.romaji}</Text>
+                            <Text style={styles.hintText}>
+                                Did you know it?
+                            </Text>
+                        </Animated.View>
+                    </View>
+                </TouchableOpacity>
+            </Animated.View>
             {showAnswerButtons && (
-                <View style={styles.answerButtons}>
+                <Animated.View
+                    style={[styles.answerButtons, answerButtonsAnimatedStyle]}
+                >
                     <TouchableOpacity
                         style={[styles.answerButton, styles.incorrectButton]}
                         onPress={() => handleAnswer(false)}
@@ -126,14 +195,8 @@ export const Flashcard: React.FC<FlashcardProps> = ({
                             ✅ I knew it!
                         </Text>
                     </TouchableOpacity>
-                </View>
+                </Animated.View>
             )}
-
-            <Toast
-                isVisible={showToast}
-                isCorrect={toastIsCorrect}
-                onHide={() => setShowToast(false)}
-            />
         </View>
     );
 };
