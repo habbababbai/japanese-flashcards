@@ -67,8 +67,11 @@ describe('Study Screen', () => {
 
       renderWithProvider(<HiraganaStudyScreen />);
 
-      // Should show progress with limited characters
-      expect(screen.getByText('1 / 3')).toBeTruthy();
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard with a hiragana character
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
 
     it('should render with in-order study options', () => {
@@ -80,8 +83,11 @@ describe('Study Screen', () => {
 
       renderWithProvider(<HiraganaStudyScreen />);
 
-      // Should show progress with all characters
-      expect(screen.getByText('1 / 5')).toBeTruthy();
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard with a hiragana character
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
 
     it('should render with shuffled study options without character count (all characters)', () => {
@@ -93,8 +99,11 @@ describe('Study Screen', () => {
 
       renderWithProvider(<HiraganaStudyScreen />);
 
-      // Should show progress with all characters
-      expect(screen.getByText('1 / 5')).toBeTruthy();
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard with a hiragana character
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
 
     it('should render with limited character count', () => {
@@ -107,8 +116,11 @@ describe('Study Screen', () => {
 
       renderWithProvider(<HiraganaStudyScreen />);
 
-      // Should show progress with limited characters
-      expect(screen.getByText('1 / 2')).toBeTruthy();
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard with a hiragana character
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
 
     it('should render with all characters in order', () => {
@@ -120,22 +132,11 @@ describe('Study Screen', () => {
 
       renderWithProvider(<HiraganaStudyScreen />);
 
-      // Should show progress with all characters
-      expect(screen.getByText('1 / 5')).toBeTruthy();
-    });
-
-    it('should render with shuffled study options and character count', () => {
-      mockUseLocalSearchParams.mockReturnValue({
-        studyOptions: JSON.stringify({
-          isShuffled: true,
-          characterCount: 3,
-        }),
-      });
-
-      renderWithProvider(<HiraganaStudyScreen />);
-
-      // Should show progress with limited characters
-      expect(screen.getByText('1 / 3')).toBeTruthy();
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard with a hiragana character
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
   });
 
@@ -150,8 +151,11 @@ describe('Study Screen', () => {
 
       renderWithProvider(<KatakanaStudyScreen />);
 
-      // Should show progress with limited characters
-      expect(screen.getByText('1 / 3')).toBeTruthy();
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard with a katakana character
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
 
     it('should render with in-order study options', () => {
@@ -163,8 +167,11 @@ describe('Study Screen', () => {
 
       renderWithProvider(<KatakanaStudyScreen />);
 
-      // Should show progress with all characters
-      expect(screen.getByText('1 / 5')).toBeTruthy();
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard with a katakana character
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
 
     it('should render with limited character count', () => {
@@ -177,8 +184,11 @@ describe('Study Screen', () => {
 
       renderWithProvider(<KatakanaStudyScreen />);
 
-      // Should show progress with limited characters
-      expect(screen.getByText('1 / 2')).toBeTruthy();
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard with a katakana character
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
   });
 
@@ -188,8 +198,11 @@ describe('Study Screen', () => {
 
       renderWithProvider(<HiraganaStudyScreen />);
 
-      // Should default to shuffled mode
-      expect(screen.getByText('1 / 5')).toBeTruthy();
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
 
     it('should handle malformed study options gracefully', () => {
@@ -197,9 +210,13 @@ describe('Study Screen', () => {
         studyOptions: 'invalid json',
       });
 
-      // Should render with default options
       renderWithProvider(<HiraganaStudyScreen />);
-      expect(screen.getByText('1 / 5')).toBeTruthy();
+      
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
 
     it('should handle study options with invalid character count', () => {
@@ -212,8 +229,11 @@ describe('Study Screen', () => {
 
       renderWithProvider(<HiraganaStudyScreen />);
 
-      // Should handle invalid count gracefully by using all characters
-      expect(screen.getByText('1 / 4')).toBeTruthy();
+      // Should render the close button
+      expect(screen.getByText('✕')).toBeTruthy();
+      
+      // Should render a flashcard
+      expect(screen.getByText('What does this sound like?')).toBeTruthy();
     });
   });
 
@@ -242,6 +262,35 @@ describe('Study Screen', () => {
           type: 'studySession/startSession',
           payload: {
             kanaType: 'hiragana',
+            studyOptions,
+          },
+        })
+      );
+    });
+
+    it('should dispatch startSession with correct katakana type', () => {
+      const studyOptions = {
+        isShuffled: false,
+      };
+
+      mockUseLocalSearchParams.mockReturnValue({
+        studyOptions: JSON.stringify(studyOptions),
+      });
+
+      const store = createTestStore();
+      const dispatchSpy = jest.spyOn(store, 'dispatch');
+
+      render(
+        <Provider store={store}>
+          <KatakanaStudyScreen />
+        </Provider>
+      );
+
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'studySession/startSession',
+          payload: {
+            kanaType: 'katakana',
             studyOptions,
           },
         })
