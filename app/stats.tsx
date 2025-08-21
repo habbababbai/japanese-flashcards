@@ -3,9 +3,38 @@ import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useStorage } from '../src/hooks/useStorage';
 import { spacing, fontSize } from '../src/utils/responsive';
+import { colors } from '../src/utils/colors';
+import { hiraganaData } from '../src/data/hiragana';
+import { katakanaData } from '../src/data/katakana';
+import { useFocusEffect } from 'expo-router';
 
 export default function StatsScreen() {
-  const { sessions, kanaProgress, isLoading } = useStorage();
+  const { sessions, kanaProgress, isLoading, loadData } = useStorage();
+
+  // Refresh data when screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      loadData();
+    }, [])
+  );
+
+  // Function to get kana character and romaji from ID
+  const getKanaInfo = (kanaId: string) => {
+    // Check hiragana first
+    const hiragana = hiraganaData.find(k => k.id === kanaId);
+    if (hiragana) {
+      return { character: hiragana.character, romaji: hiragana.romaji };
+    }
+
+    // Check katakana
+    const katakana = katakanaData.find(k => k.id === kanaId);
+    if (katakana) {
+      return { character: katakana.character, romaji: katakana.romaji };
+    }
+
+    // Fallback to ID if not found
+    return { character: kanaId, romaji: '' };
+  };
 
   const totalStudyTime = sessions.reduce((total, session) => {
     if (session.endTime) {
@@ -54,8 +83,11 @@ export default function StatsScreen() {
         const accuracy =
           total > 0 ? Math.round((progress.correctCount / total) * 100) : 0;
 
+        const kanaInfo = getKanaInfo(kanaId);
         return {
           kanaId,
+          character: kanaInfo.character,
+          romaji: kanaInfo.romaji,
           progress,
           total,
           accuracy,
@@ -171,7 +203,10 @@ export default function StatsScreen() {
                 data={kanaProgressData}
                 renderItem={({ item }) => (
                   <View style={styles.kanaProgressItem}>
-                    <Text style={styles.kanaId}>{item.kanaId}</Text>
+                    <View style={styles.kanaInfo}>
+                      <Text style={styles.kanaCharacter}>{item.character}</Text>
+                      <Text style={styles.kanaRomaji}>{item.romaji}</Text>
+                    </View>
                     <View style={styles.kanaProgressStats}>
                       <Text style={styles.kanaProgressText}>
                         {item.progress.correctCount}✓{' '}
@@ -195,37 +230,40 @@ export default function StatsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background.secondary,
     flex: 1,
   },
   emptyText: {
-    color: '#999',
+    color: colors.text.tertiary,
     fontSize: fontSize.md,
     fontStyle: 'italic',
     marginTop: spacing.lg,
     textAlign: 'center',
   },
   header: {
-    backgroundColor: 'white',
-    borderBottomColor: '#e0e0e0',
+    backgroundColor: colors.background.primary,
+    borderBottomColor: colors.border.light,
     borderBottomWidth: 1,
     paddingBottom: spacing.md,
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.lg,
   },
   kanaAccuracy: {
-    color: '#4A90E2',
+    color: colors.primary.main,
     fontSize: fontSize.sm,
     fontWeight: '600',
   },
-  kanaId: {
-    color: '#333',
-    fontSize: fontSize.md,
-    fontWeight: '500',
+  kanaCharacter: {
+    color: colors.text.primary,
+    fontSize: fontSize.xl,
+    fontWeight: 'bold',
+  },
+  kanaInfo: {
+    alignItems: 'center',
   },
   kanaProgressItem: {
     alignItems: 'center',
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: colors.neutral.gray[100],
     borderBottomWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -235,52 +273,57 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   kanaProgressText: {
-    color: '#666',
+    color: colors.text.secondary,
     fontSize: fontSize.sm,
     marginBottom: spacing.xs,
+  },
+  kanaRomaji: {
+    color: colors.text.secondary,
+    fontSize: fontSize.sm,
+    marginTop: spacing.xs,
   },
   listContainer: {
     height: 300,
     marginTop: spacing.sm,
   },
   safeArea: {
-    backgroundColor: 'white',
+    backgroundColor: colors.background.primary,
     flex: 1,
   },
   section: {
-    backgroundColor: 'white',
+    backgroundColor: colors.background.primary,
     borderRadius: 12,
     elevation: 3,
     margin: spacing.md,
     padding: spacing.lg,
-    shadowColor: '#000',
+    shadowColor: colors.shadow.light,
     shadowOffset: { height: 2, width: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
   sectionSubtitle: {
-    color: '#666',
+    color: colors.text.secondary,
     fontSize: fontSize.sm,
     marginBottom: spacing.md,
   },
   sectionTitle: {
-    color: '#333',
+    color: colors.text.primary,
     fontSize: fontSize.lg,
     fontWeight: '600',
     marginBottom: spacing.md,
   },
   sessionCard: {
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.neutral.gray[50],
     borderRadius: 8,
     marginBottom: spacing.sm,
     padding: spacing.md,
   },
   sessionDate: {
-    color: '#666',
+    color: colors.text.secondary,
     fontSize: fontSize.sm,
   },
   sessionDuration: {
-    color: '#4A90E2',
+    color: colors.primary.main,
     fontSize: fontSize.sm,
     fontWeight: '500',
   },
@@ -290,7 +333,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   sessionStat: {
-    color: '#666',
+    color: colors.text.secondary,
     fontSize: fontSize.sm,
     marginBottom: spacing.xs,
   },
@@ -298,25 +341,25 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   sessionType: {
-    color: '#333',
+    color: colors.text.primary,
     fontSize: fontSize.md,
     fontWeight: '600',
   },
   statCard: {
     alignItems: 'center',
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.neutral.gray[50],
     borderRadius: 8,
     marginBottom: spacing.sm,
     padding: spacing.md,
     width: '48%',
   },
   statLabel: {
-    color: '#666',
+    color: colors.text.secondary,
     fontSize: fontSize.sm,
     marginTop: spacing.xs,
   },
   statNumber: {
-    color: '#4A90E2',
+    color: colors.primary.main,
     fontSize: fontSize.xl,
     fontWeight: 'bold',
   },
@@ -326,7 +369,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   titleText: {
-    color: '#333',
+    color: colors.text.primary,
     fontSize: fontSize.xl,
     fontWeight: 'bold',
     textAlign: 'center',

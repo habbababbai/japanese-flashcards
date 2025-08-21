@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { fontSize, spacing } from '../../src/utils/responsive';
+import { colors } from '../../src/utils/colors';
 
 interface StudySettings {
   isShuffled: boolean;
@@ -85,47 +86,34 @@ export default function KatakanaSettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    backgroundColor: 'white',
-    flex: 1,
-  },
   container: {
-    backgroundColor: 'white',
+    backgroundColor: colors.background.primary,
     flex: 1,
-  },
-  header: {
-    alignItems: 'center',
-    borderBottomColor: '#e0e0e0',
-    borderBottomWidth: 1,
-    paddingBottom: spacing.md,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xl,
-  },
-  titleText: {
-    fontSize: fontSize.xl,
-    fontWeight: 'bold',
   },
   content: {
     flex: 1,
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl,
   },
-  sectionTitle: {
-    fontSize: fontSize.lg,
-    fontWeight: '600',
-    marginBottom: spacing.md,
-  },
-  optionsContainer: {
-    gap: spacing.md,
-    marginBottom: spacing.xl,
+  header: {
+    alignItems: 'center',
+    borderBottomColor: colors.border.light,
+    borderBottomWidth: 1,
+    paddingBottom: spacing.md,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl,
   },
   optionButton: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.neutral.gray[100],
     borderRadius: 12,
     padding: spacing.lg,
   },
   optionButtonActive: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: colors.primary.main,
+  },
+  optionDescription: {
+    color: colors.text.secondary,
+    fontSize: fontSize.sm,
   },
   optionText: {
     fontSize: fontSize.md,
@@ -133,21 +121,34 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   optionTextActive: {
-    color: 'white',
+    color: colors.text.inverse,
   },
-  optionDescription: {
-    color: '#666',
-    fontSize: fontSize.sm,
+  optionsContainer: {
+    gap: spacing.md,
+    marginBottom: spacing.xl,
+  },
+  safeArea: {
+    backgroundColor: '#FFFFFF',
+    flex: 1,
+  },
+  sectionTitle: {
+    fontSize: fontSize.lg,
+    fontWeight: '600',
+    marginBottom: spacing.md,
   },
   startButton: {
-    backgroundColor: '#4A90E2',
+    alignItems: 'center',
+    backgroundColor: colors.primary.main,
     borderRadius: 12,
     paddingVertical: spacing.lg,
-    alignItems: 'center',
   },
   startButtonText: {
-    color: 'white',
+    color: colors.text.inverse,
     fontSize: fontSize.md,
     fontWeight: '600',
+  },
+  titleText: {
+    fontSize: fontSize.xl,
+    fontWeight: 'bold',
   },
 });

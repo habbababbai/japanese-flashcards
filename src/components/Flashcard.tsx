@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Kana } from '../types';
 import { spacing, fontSize, hp, wp } from '../utils/responsive';
+import { colors } from '../utils/colors';
 
 interface FlashcardProps {
   kana: Kana;
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
     minHeight: hp(7),
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
-    shadowColor: '#000',
+    shadowColor: colors.shadow.medium,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   answerButtonText: {
-    color: 'white',
+    color: colors.text.inverse,
     fontSize: fontSize.sm,
     fontWeight: '700',
     lineHeight: fontSize.sm * 1.25,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: hp(3.5),
     position: 'absolute',
-    shadowColor: '#000',
+    shadowColor: colors.shadow.medium,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   cardBack: {
-    backgroundColor: '#FFC107',
+    backgroundColor: colors.secondary.main,
   },
   cardContainer: {
     height: hp(50),
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
     width: wp(90),
   },
   cardFront: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: colors.primary.main,
   },
   container: {
     alignItems: 'center',
@@ -244,8 +245,8 @@ const styles = StyleSheet.create({
     padding: spacing.md,
   },
   correctButton: {
-    backgroundColor: '#4CAF50',
-    borderColor: '#45A049',
+    backgroundColor: colors.success.main,
+    borderColor: colors.success.dark,
     borderWidth: 2,
   },
   hintText: {
@@ -255,19 +256,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   incorrectButton: {
-    backgroundColor: '#F44336',
-    borderColor: '#D32F2F',
+    backgroundColor: colors.error.main,
+    borderColor: colors.error.dark,
     borderWidth: 2,
   },
   kanaText: {
-    color: 'white',
+    color: colors.text.inverse,
     fontSize: fontSize.huge,
     fontWeight: 'bold',
     marginBottom: spacing.lg,
     textAlign: 'center',
   },
   romajiText: {
-    color: 'white',
+    color: colors.text.inverse,
     fontSize: fontSize.xxl,
     fontWeight: 'bold',
     marginBottom: spacing.lg,
