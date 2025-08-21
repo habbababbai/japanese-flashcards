@@ -4,9 +4,29 @@ import { FlashList } from '@shopify/flash-list';
 import { useStorage } from '../src/hooks/useStorage';
 import { spacing, fontSize } from '../src/utils/responsive';
 import { colors } from '../src/utils/colors';
+import { hiraganaData } from '../src/data/hiragana';
+import { katakanaData } from '../src/data/katakana';
 
 export default function StatsScreen() {
   const { sessions, kanaProgress, isLoading } = useStorage();
+
+  // Function to get kana character and romaji from ID
+  const getKanaInfo = (kanaId: string) => {
+    // Check hiragana first
+    const hiragana = hiraganaData.find(k => k.id === kanaId);
+    if (hiragana) {
+      return { character: hiragana.character, romaji: hiragana.romaji };
+    }
+
+    // Check katakana
+    const katakana = katakanaData.find(k => k.id === kanaId);
+    if (katakana) {
+      return { character: katakana.character, romaji: katakana.romaji };
+    }
+
+    // Fallback to ID if not found
+    return { character: kanaId, romaji: '' };
+  };
 
   const totalStudyTime = sessions.reduce((total, session) => {
     if (session.endTime) {
@@ -55,8 +75,11 @@ export default function StatsScreen() {
         const accuracy =
           total > 0 ? Math.round((progress.correctCount / total) * 100) : 0;
 
+        const kanaInfo = getKanaInfo(kanaId);
         return {
           kanaId,
+          character: kanaInfo.character,
+          romaji: kanaInfo.romaji,
           progress,
           total,
           accuracy,
@@ -172,7 +195,10 @@ export default function StatsScreen() {
                 data={kanaProgressData}
                 renderItem={({ item }) => (
                   <View style={styles.kanaProgressItem}>
-                    <Text style={styles.kanaId}>{item.kanaId}</Text>
+                    <View style={styles.kanaInfo}>
+                      <Text style={styles.kanaCharacter}>{item.character}</Text>
+                      <Text style={styles.kanaRomaji}>{item.romaji}</Text>
+                    </View>
                     <View style={styles.kanaProgressStats}>
                       <Text style={styles.kanaProgressText}>
                         {item.progress.correctCount}✓{' '}
@@ -219,10 +245,13 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
     fontWeight: '600',
   },
-  kanaId: {
+  kanaCharacter: {
     color: colors.text.primary,
-    fontSize: fontSize.md,
-    fontWeight: '500',
+    fontSize: fontSize.xl,
+    fontWeight: 'bold',
+  },
+  kanaInfo: {
+    alignItems: 'center',
   },
   kanaProgressItem: {
     alignItems: 'center',
@@ -239,6 +268,11 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     fontSize: fontSize.sm,
     marginBottom: spacing.xs,
+  },
+  kanaRomaji: {
+    color: colors.text.secondary,
+    fontSize: fontSize.sm,
+    marginTop: spacing.xs,
   },
   listContainer: {
     height: 300,

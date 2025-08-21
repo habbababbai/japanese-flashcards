@@ -14,6 +14,7 @@ export default function HiraganaStudyScreen() {
   const [shuffledKanaList, setShuffledKanaList] = useState<Kana[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState<StudyProgress[]>([]);
+  const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
 
   // Initialize with shuffled list
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function HiraganaStudyScreen() {
     setShuffledKanaList(shuffled);
     setCurrentIndex(0);
     setProgress([]);
+    setSessionStartTime(new Date()); // Set start time when study begins
   }, []);
 
   const currentKana = shuffledKanaList[currentIndex];
@@ -61,7 +63,7 @@ export default function HiraganaStudyScreen() {
       const session = {
         id: Date.now().toString(),
         kanaType: 'hiragana' as const,
-        startTime: new Date(),
+        startTime: sessionStartTime || new Date(),
         endTime: new Date(),
         cardsReviewed: finalProgress.length,
         correctAnswers: finalProgress.filter(p => p.isCorrect).length,
