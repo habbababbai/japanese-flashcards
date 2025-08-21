@@ -8,7 +8,12 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Kana } from '../types';
-import { spacing, fontSize, hp, wp } from '../utils/responsive';
+import {
+  spacing,
+  fontSize,
+  screenWidth,
+  screenHeight,
+} from '../utils/responsive';
 import { colors } from '../utils/colors';
 
 interface FlashcardProps {
@@ -204,11 +209,11 @@ export const Flashcard: React.FC<FlashcardProps> = ({
 const styles = StyleSheet.create({
   answerButton: {
     alignItems: 'center',
-    borderRadius: hp(2),
+    borderRadius: 16,
     elevation: 8,
     flex: 1,
     justifyContent: 'center',
-    minHeight: hp(7),
+    minHeight: 56,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
     shadowColor: colors.shadow.medium,
@@ -236,11 +241,11 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     backfaceVisibility: 'hidden',
-    borderRadius: hp(2.5),
+    borderRadius: 20,
     elevation: 8,
     height: '100%',
     justifyContent: 'center',
-    padding: hp(3.5),
+    padding: 28,
     position: 'absolute',
     shadowColor: colors.shadow.medium,
     shadowOffset: {
@@ -255,9 +260,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondary.main,
   },
   cardContainer: {
-    height: hp(50),
+    height: Math.min(screenHeight * 0.5, 400),
     position: 'relative',
-    width: wp(90),
+    width: Math.min(screenWidth * 0.9, 350),
   },
   cardFront: {
     backgroundColor: colors.primary.main,
