@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   safeArea: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.neutral.white,
     flex: 1,
   },
   sectionTitle: {
