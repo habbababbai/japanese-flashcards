@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import { fontSize, spacing } from '../../src/utils/responsive';
+import { fontSize, spacing, hp } from '../../src/utils/responsive';
 import { colors } from '../../src/utils/colors';
 import { StudyOptions } from '../../src/types';
 
@@ -34,7 +28,7 @@ export default function HiraganaSettingsScreen() {
   const characterCountOptions = [10, 20, 30, 'All'];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.titleText}>Hiragana Study</Text>
@@ -154,14 +148,14 @@ export default function HiraganaSettingsScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   characterCountButton: {
     backgroundColor: colors.neutral.gray[200],
-    borderRadius: 20,
+    borderRadius: spacing.lg,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
   },
@@ -195,13 +189,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: colors.border.light,
     borderBottomWidth: 1,
+    minHeight: spacing.xxl * 2,
     paddingBottom: spacing.md,
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl,
   },
   optionButton: {
     backgroundColor: colors.neutral.gray[100],
-    borderRadius: 12,
+    borderRadius: spacing.md,
     padding: spacing.lg,
   },
   optionButtonActive: {
@@ -226,6 +221,8 @@ const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: colors.neutral.white,
     flex: 1,
+    minHeight: '100%',
+    paddingTop: hp(6), // Fixed top padding to prevent shift
   },
   sectionTitle: {
     fontSize: fontSize.lg,
@@ -235,7 +232,7 @@ const styles = StyleSheet.create({
   startButton: {
     alignItems: 'center',
     backgroundColor: colors.primary.main,
-    borderRadius: 12,
+    borderRadius: spacing.md,
     paddingVertical: spacing.lg,
   },
   startButtonDisabled: {

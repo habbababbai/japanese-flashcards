@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import { fontSize, spacing } from '../../src/utils/responsive';
+import { fontSize, spacing, hp } from '../../src/utils/responsive';
 import { colors } from '../../src/utils/colors';
 import { StudyOptions } from '../../src/types';
 
@@ -34,7 +28,7 @@ export default function KatakanaSettingsScreen() {
   const characterCountOptions = [10, 20, 30, 'All'];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.titleText}>Katakana Study</Text>
@@ -154,11 +148,33 @@ export default function KatakanaSettingsScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  characterCountButton: {
+    backgroundColor: colors.neutral.gray[200],
+    borderRadius: spacing.lg,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  characterCountButtonActive: {
+    backgroundColor: colors.primary.main,
+  },
+  characterCountContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginBottom: spacing.xl,
+  },
+  characterCountText: {
+    fontSize: fontSize.md,
+    fontWeight: '600',
+  },
+  characterCountTextActive: {
+    color: colors.text.inverse,
+  },
   container: {
     backgroundColor: colors.background.primary,
     flex: 1,
@@ -172,13 +188,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: colors.border.light,
     borderBottomWidth: 1,
+    minHeight: spacing.xxl * 2,
     paddingBottom: spacing.md,
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl,
   },
   optionButton: {
     backgroundColor: colors.neutral.gray[100],
-    borderRadius: 12,
+    borderRadius: spacing.md,
     padding: spacing.lg,
   },
   optionButtonActive: {
@@ -201,8 +218,10 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   safeArea: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.neutral.white,
     flex: 1,
+    minHeight: '100%',
+    paddingTop: hp(6), // Fixed top padding to prevent shift
   },
   sectionTitle: {
     fontSize: fontSize.lg,
@@ -212,42 +231,20 @@ const styles = StyleSheet.create({
   startButton: {
     alignItems: 'center',
     backgroundColor: colors.primary.main,
-    borderRadius: 12,
+    borderRadius: spacing.md,
     paddingVertical: spacing.lg,
+  },
+  startButtonDisabled: {
+    backgroundColor: colors.neutral.gray[300],
+    opacity: 0.7,
   },
   startButtonText: {
     color: colors.text.inverse,
     fontSize: fontSize.md,
     fontWeight: '600',
   },
-  startButtonDisabled: {
-    backgroundColor: colors.neutral.gray[300],
-    opacity: 0.7,
-  },
   startButtonTextDisabled: {
     color: colors.text.tertiary,
-  },
-  characterCountContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-    marginBottom: spacing.xl,
-  },
-  characterCountButton: {
-    backgroundColor: colors.neutral.gray[200],
-    borderRadius: 20,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-  },
-  characterCountButtonActive: {
-    backgroundColor: colors.primary.main,
-  },
-  characterCountText: {
-    fontSize: fontSize.md,
-    fontWeight: '600',
-  },
-  characterCountTextActive: {
-    color: colors.text.inverse,
   },
   titleText: {
     fontSize: fontSize.xl,

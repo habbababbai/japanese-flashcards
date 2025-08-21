@@ -41,3 +41,34 @@ export const fontSize = {
   xxl: wp(12), // ~48px
   huge: wp(24), // ~96px
 };
+
+// Additional responsive utilities
+export const borderRadius = {
+  xs: wp(1), // ~4px
+  sm: wp(2), // ~8px
+  md: wp(3), // ~12px
+  lg: wp(4), // ~16px
+  xl: wp(6), // ~24px
+  xxl: wp(8), // ~32px
+};
+
+export const iconSize = {
+  xs: wp(4), // ~16px
+  sm: wp(5), // ~20px
+  md: wp(6), // ~24px
+  lg: wp(8), // ~32px
+  xl: wp(10), // ~40px
+  xxl: wp(12), // ~48px
+};
+
+// Responsive layout helpers
+export const cardDimensions = {
+  width: Math.min(screenWidth * 0.9, 350),
+  height: Math.min(screenHeight * 0.5, 400),
+};
+
+export const buttonHeight = {
+  small: hp(5), // ~40px
+  medium: hp(6), // ~48px
+  large: hp(8), // ~64px
+};

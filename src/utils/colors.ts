@@ -10,9 +10,9 @@ export const colors = {
 
   // Secondary colors
   secondary: {
-    main: '#FFC107', // Yellow for flashcard backs
-    light: '#FFD54F',
-    dark: '#FF8F00',
+    main: '#87CEEB', // Light blue for flashcard backs
+    light: '#B0E0E6',
+    dark: '#5F9EA0',
     contrast: '#000000',
   },
 

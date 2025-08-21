@@ -8,12 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Kana } from '../types';
-import {
-  spacing,
-  fontSize,
-  screenWidth,
-  screenHeight,
-} from '../utils/responsive';
+import { spacing, fontSize, cardDimensions } from '../utils/responsive';
 import { colors } from '../utils/colors';
 
 interface FlashcardProps {
@@ -28,22 +23,16 @@ export const Flashcard: React.FC<FlashcardProps> = ({
   onAnswer,
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [showAnswerButtons, setShowAnswerButtons] = useState(false);
   const [userAnswer, setUserAnswer] = useState<boolean | null>(null);
   const flipAnimation = useSharedValue(0);
-  const answerButtonsOpacity = useSharedValue(1);
-  const cardScale = useSharedValue(1);
-  const cardOpacity = useSharedValue(1);
+  const cardAnimation = useSharedValue(1);
 
   // Reset state when kana changes
   useEffect(() => {
     setIsFlipped(false);
-    setShowAnswerButtons(false);
     setUserAnswer(null);
     flipAnimation.value = 0;
-    answerButtonsOpacity.value = 1;
-    cardScale.value = 1;
-    cardOpacity.value = 1;
+    cardAnimation.value = 1;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kana.id]);
 
@@ -54,13 +43,6 @@ export const Flashcard: React.FC<FlashcardProps> = ({
       stiffness: 100,
     });
     setIsFlipped(!isFlipped);
-
-    if (!isFlipped) {
-      setShowAnswerButtons(true);
-    } else {
-      setShowAnswerButtons(false);
-    }
-
     onFlip?.();
   }, [isFlipped, flipAnimation, onFlip]);
 
@@ -69,25 +51,12 @@ export const Flashcard: React.FC<FlashcardProps> = ({
       // Set user answer for color feedback
       setUserAnswer(isCorrect);
 
-      // Hide answer buttons immediately for better test compatibility
-      setShowAnswerButtons(false);
-
-      // Animate answer buttons fade out
-      answerButtonsOpacity.value = withTiming(0, {
-        duration: 500,
-      });
-
-      // Animate card scale down slightly
-      cardScale.value = withTiming(0.95, {
-        duration: 400,
-      });
-
       // Animate card fade out
-      cardOpacity.value = withTiming(0, {
+      cardAnimation.value = withTiming(0, {
         duration: 600,
       });
 
-      // Call onAnswer after a shorter delay to allow animations to complete
+      // Call onAnswer after animation completes
       setTimeout(() => {
         onAnswer?.(isCorrect);
         flipAnimation.value = withSpring(0, {
@@ -97,49 +66,39 @@ export const Flashcard: React.FC<FlashcardProps> = ({
         setIsFlipped(false);
 
         // Reset animations for next card
-        cardScale.value = withTiming(1, { duration: 400 });
-        answerButtonsOpacity.value = withTiming(1, { duration: 500 });
-        cardOpacity.value = withTiming(1, { duration: 600 });
-      }, 500);
+        cardAnimation.value = withTiming(1, { duration: 600 });
+      }, 600);
     },
-    [onAnswer, answerButtonsOpacity, cardScale, cardOpacity, flipAnimation]
+    [onAnswer, cardAnimation, flipAnimation]
   );
 
   const frontAnimatedStyle = useAnimatedStyle(() => {
-    const rotateY = interpolate(flipAnimation.value, [0, 1], [0, 180]);
+    const rotateY = interpolate(flipAnimation.value, [0, 1], [0, Math.PI]);
     return {
-      transform: [{ rotateY: `${rotateY}deg` }],
+      transform: [{ rotateY: `${rotateY}rad` }],
     };
   });
 
   const backAnimatedStyle = useAnimatedStyle(() => {
-    const rotateY = interpolate(flipAnimation.value, [0, 1], [180, 360]);
+    const rotateY = interpolate(
+      flipAnimation.value,
+      [0, 1],
+      [Math.PI, 2 * Math.PI]
+    );
     return {
-      transform: [{ rotateY: `${rotateY}deg` }],
+      transform: [{ rotateY: `${rotateY}rad` }],
     };
   });
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ scale: cardScale.value }],
-    };
-  });
-
-  const answerButtonsAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: answerButtonsOpacity.value,
-    };
-  });
-
-  const cardContainerAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: cardOpacity.value,
+      opacity: cardAnimation.value,
     };
   });
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[cardAnimatedStyle, cardContainerAnimatedStyle]}>
+      <Animated.View style={cardAnimatedStyle}>
         <TouchableOpacity onPress={handleFlip} activeOpacity={0.9}>
           <View style={styles.cardContainer}>
             <Animated.View
@@ -182,10 +141,8 @@ export const Flashcard: React.FC<FlashcardProps> = ({
           </View>
         </TouchableOpacity>
       </Animated.View>
-      {showAnswerButtons && (
-        <Animated.View
-          style={[styles.answerButtons, answerButtonsAnimatedStyle]}
-        >
+      {isFlipped ? (
+        <Animated.View style={styles.answerButtons}>
           <TouchableOpacity
             style={[styles.answerButton, styles.incorrectButton]}
             onPress={() => handleAnswer(false)}
@@ -201,6 +158,8 @@ export const Flashcard: React.FC<FlashcardProps> = ({
             <Text style={styles.answerButtonText}>✅ I knew it!</Text>
           </TouchableOpacity>
         </Animated.View>
+      ) : (
+        <View style={styles.answerButtons} />
       )}
     </View>
   );
@@ -209,20 +168,20 @@ export const Flashcard: React.FC<FlashcardProps> = ({
 const styles = StyleSheet.create({
   answerButton: {
     alignItems: 'center',
-    borderRadius: 16,
+    borderRadius: spacing.md,
     elevation: 8,
     flex: 1,
     justifyContent: 'center',
-    minHeight: 56,
+    minHeight: spacing.xxl,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
     shadowColor: colors.shadow.medium,
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: spacing.xs,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 6,
+    shadowRadius: spacing.sm,
   },
   answerButtonText: {
     color: colors.text.inverse,
@@ -232,51 +191,52 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   answerButtons: {
+    bottom: spacing.md,
     flexDirection: 'row',
     gap: spacing.md,
     justifyContent: 'space-around',
-    marginTop: spacing.lg,
+    left: 0,
     paddingHorizontal: spacing.md,
+    position: 'absolute',
+    right: 0,
   },
   card: {
     alignItems: 'center',
     backfaceVisibility: 'hidden',
-    borderRadius: 20,
+    borderRadius: spacing.lg,
     elevation: 8,
     height: '100%',
     justifyContent: 'center',
-    padding: 28,
+    padding: spacing.xl,
     position: 'absolute',
     shadowColor: colors.shadow.medium,
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: spacing.xs,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowRadius: spacing.md,
     width: '100%',
   },
   cardBack: {
     backgroundColor: colors.secondary.main,
   },
   cardContainer: {
-    height: Math.min(screenHeight * 0.5, 400),
+    alignSelf: 'center',
+    height: cardDimensions.height,
     position: 'relative',
-    width: Math.min(screenWidth * 0.9, 350),
+    width: cardDimensions.width,
   },
   cardFront: {
     backgroundColor: colors.primary.main,
   },
   container: {
     alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
     padding: spacing.md,
+    paddingBottom: spacing.xxl * 2 + spacing.lg,
   },
   correctButton: {
     backgroundColor: colors.success.main,
-    borderColor: colors.success.dark,
-    borderWidth: 2,
   },
   hidden: {
     opacity: 0,
@@ -290,8 +250,6 @@ const styles = StyleSheet.create({
   },
   incorrectButton: {
     backgroundColor: colors.error.main,
-    borderColor: colors.error.dark,
-    borderWidth: 2,
   },
   kanaText: {
     color: colors.text.inverse,

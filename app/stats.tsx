@@ -1,8 +1,8 @@
 import React, { useMemo, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useAppSelector } from '../src/hooks/useRedux';
-import { spacing, fontSize } from '../src/utils/responsive';
+import { spacing, fontSize, hp } from '../src/utils/responsive';
 import { colors } from '../src/utils/colors';
 import { hiraganaData } from '../src/data/hiragana';
 import { katakanaData } from '../src/data/katakana';
@@ -83,7 +83,7 @@ export default function StatsScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.titleText}>Study Statistics</Text>
@@ -92,12 +92,12 @@ export default function StatsScreen() {
             <Text style={styles.emptyText}>Loading...</Text>
           </View>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <View style={styles.header}>
         <Text style={styles.titleText}>Study Statistics</Text>
       </View>
@@ -211,7 +211,7 @@ export default function StatsScreen() {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -231,6 +231,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background.primary,
     borderBottomColor: colors.border.light,
     borderBottomWidth: 1,
+    minHeight: spacing.xxl * 2,
     paddingBottom: spacing.md,
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.lg,
@@ -275,23 +276,26 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   listContainer: {
-    height: 400,
+    height: hp(50),
     marginTop: spacing.sm,
   },
   safeArea: {
     backgroundColor: colors.neutral.white,
     flex: 1,
+    // Prevent layout shift by ensuring consistent positioning
+    minHeight: '100%',
+    paddingTop: hp(6), // Fixed top padding to prevent shift
   },
   section: {
     backgroundColor: colors.background.primary,
-    borderRadius: 12,
+    borderRadius: spacing.md,
     elevation: 3,
     margin: spacing.md,
     padding: spacing.lg,
     shadowColor: colors.shadow.light,
-    shadowOffset: { height: 2, width: 0 },
+    shadowOffset: { height: spacing.xs / 2, width: 0 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: spacing.xs,
   },
   sectionSubtitle: {
     color: colors.text.secondary,
@@ -306,7 +310,7 @@ const styles = StyleSheet.create({
   },
   sessionCard: {
     backgroundColor: colors.neutral.gray[50],
-    borderRadius: 8,
+    borderRadius: spacing.sm,
     marginBottom: spacing.sm,
     padding: spacing.md,
   },
@@ -340,7 +344,7 @@ const styles = StyleSheet.create({
   statCard: {
     alignItems: 'center',
     backgroundColor: colors.neutral.gray[50],
-    borderRadius: 8,
+    borderRadius: spacing.sm,
     marginBottom: spacing.sm,
     padding: spacing.md,
     width: '48%',
