@@ -177,7 +177,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
           </View>
         </TouchableOpacity>
       </Animated.View>
-      {showAnswerButtons && (
+      {showAnswerButtons ? (
         <Animated.View
           style={[styles.answerButtons, answerButtonsAnimatedStyle]}
         >
@@ -196,6 +196,8 @@ export const Flashcard: React.FC<FlashcardProps> = ({
             <Text style={styles.answerButtonText}>✅ I knew it!</Text>
           </TouchableOpacity>
         </Animated.View>
+      ) : (
+        <View style={styles.answerButtons} />
       )}
     </View>
   );
@@ -227,11 +229,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   answerButtons: {
+    bottom: spacing.md,
     flexDirection: 'row',
     gap: spacing.md,
     justifyContent: 'space-around',
-    marginTop: spacing.lg,
+    left: 0,
     paddingHorizontal: spacing.md,
+    position: 'absolute',
+    right: 0,
   },
   card: {
     alignItems: 'center',
@@ -265,10 +270,8 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    minHeight: '100%',
     padding: spacing.md,
+    paddingBottom: spacing.xxl * 2 + spacing.lg,
   },
   correctButton: {
     backgroundColor: colors.success.main,
