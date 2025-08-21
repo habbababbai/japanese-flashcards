@@ -87,15 +87,15 @@ describe('Study Options UI', () => {
       expect(screen.queryByText('All')).toBeNull();
     });
 
-    it('should disable start button when shuffled is selected but no character count is chosen', () => {
+    it('should enable start button when shuffled is selected because "All" is auto-selected', () => {
       renderWithProvider(<HiraganaSettingsScreen />);
 
       // Select shuffled mode
       fireEvent.press(screen.getByText('Shuffled'));
 
-      // Start button should be disabled
+      // Start button should be enabled because "All" is auto-selected
       const startButton = screen.getByText('Start Studying');
-      expect(startButton.props.style).toContainEqual(
+      expect(startButton.props.style).not.toContainEqual(
         expect.objectContaining({ opacity: 0.7 })
       );
     });
@@ -130,7 +130,7 @@ describe('Study Options UI', () => {
     });
 
     it('should pass correct study options when starting study session', () => {
-      const mockRouter = require('expo-router');
+      const mockRouter = jest.requireMock('expo-router');
       renderWithProvider(<HiraganaSettingsScreen />);
 
       // Select shuffled mode and character count
@@ -152,7 +152,7 @@ describe('Study Options UI', () => {
     });
 
     it('should pass correct study options for in-order mode', () => {
-      const mockRouter = require('expo-router');
+      const mockRouter = jest.requireMock('expo-router');
       renderWithProvider(<HiraganaSettingsScreen />);
 
       // Select in-order mode
@@ -173,7 +173,7 @@ describe('Study Options UI', () => {
     });
 
     it('should pass correct study options for "All" characters in shuffled mode', () => {
-      const mockRouter = require('expo-router');
+      const mockRouter = jest.requireMock('expo-router');
       renderWithProvider(<HiraganaSettingsScreen />);
 
       // Select shuffled mode and "All" characters
@@ -225,7 +225,7 @@ describe('Study Options UI', () => {
     });
 
     it('should pass correct study options when starting katakana study session', () => {
-      const mockRouter = require('expo-router');
+      const mockRouter = jest.requireMock('expo-router');
       renderWithProvider(<KatakanaSettingsScreen />);
 
       // Select shuffled mode and character count
@@ -326,7 +326,7 @@ describe('Study Options UI', () => {
     });
 
     it('should handle "All" character selection correctly', () => {
-      const mockRouter = require('expo-router');
+      const mockRouter = jest.requireMock('expo-router');
       renderWithProvider(<HiraganaSettingsScreen />);
 
       // Select shuffled mode

@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Flashcard } from '../../src/components/Flashcard';
 import { Kana, StudyProgress, StudyOptions } from '../../src/types';
@@ -12,10 +19,12 @@ import {
   addProgress,
 } from '../../src/store/slices/studySessionSlice';
 import { katakanaData } from '../../src/data/katakana';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function KatakanaStudyScreen() {
   const dispatch = useAppDispatch();
   const params = useLocalSearchParams();
+  const insets = useSafeAreaInsets();
 
   const [shuffledKanaList, setShuffledKanaList] = useState<Kana[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -23,9 +32,14 @@ export default function KatakanaStudyScreen() {
 
   // Parse study options from router params
   const studyOptions: StudyOptions = useMemo(() => {
-    return params.studyOptions
-      ? JSON.parse(params.studyOptions as string)
-      : { isShuffled: true };
+    try {
+      return params.studyOptions
+        ? JSON.parse(params.studyOptions as string)
+        : { isShuffled: true };
+    } catch {
+      // Return default options if JSON parsing fails
+      return { isShuffled: true };
+    }
   }, [params.studyOptions]);
 
   // Initialize with shuffled list and start session
@@ -62,6 +76,52 @@ export default function KatakanaStudyScreen() {
 
   const currentKana = shuffledKanaList[currentIndex];
   const isLastCard = currentIndex === shuffledKanaList.length - 1;
+
+  const handleClose = useCallback(() => {
+    Alert.alert(
+      'Leave Study Session?',
+      'Are you sure you want to leave? Your progress will be saved, but unanswered characters will be marked as incorrect.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Leave',
+          style: 'destructive',
+          onPress: () => {
+            // Mark all unanswered characters as wrong
+            const answeredKanaIds = new Set(progress.map(p => p.kanaId));
+            const unansweredProgress: StudyProgress[] = shuffledKanaList
+              .filter(kana => !answeredKanaIds.has(kana.id))
+              .map(kana => ({
+                kanaId: kana.id,
+                isCorrect: false,
+                responseTime: 0,
+                timestamp: new Date().toISOString(),
+              }));
+
+            // Dispatch addProgress for each unanswered character to update kanaProgress
+            unansweredProgress.forEach(progressItem => {
+              dispatch(addProgress(progressItem));
+            });
+
+            const finalProgress = [...progress, ...unansweredProgress];
+
+            // End session in Redux
+            dispatch(
+              endSession({
+                endTime: new Date().toISOString(),
+                progress: finalProgress,
+              })
+            );
+
+            router.back();
+          },
+        },
+      ]
+    );
+  }, [progress, shuffledKanaList, dispatch]);
 
   const handleAnswer = useCallback(
     (isCorrect: boolean) => {
@@ -110,71 +170,102 @@ export default function KatakanaStudyScreen() {
 
   if (!currentKana) {
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <View style={styles.headerContent}>
-              <Text style={styles.titleText}>Katakana</Text>
-              <Text style={styles.progressText}>Loading...</Text>
-            </View>
+      <View style={styles.outerContainer}>
+        <SafeAreaView style={styles.topSafeArea} />
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <Text style={styles.titleText}>Katakana</Text>
+            <Text style={styles.progressText}>Loading...</Text>
           </View>
         </View>
-      </SafeAreaView>
+        <SafeAreaView style={styles.bottomSafeArea} />
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
+    <View style={styles.outerContainer}>
+      <SafeAreaView style={styles.topSafeArea} />
+      <View style={styles.header}>
+        <View style={[styles.headerContent, { paddingTop: insets.top }]}>
+          <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>✕</Text>
+          </TouchableOpacity>
+          <View style={styles.titleContainer}>
             <Text style={styles.titleText}>Katakana</Text>
             <Text style={styles.progressText}>
               {currentIndex + 1} / {shuffledKanaList.length}
             </Text>
           </View>
-        </View>
-
-        <View style={styles.content}>
-          <Flashcard kana={currentKana} onAnswer={handleAnswer} />
+          <View style={styles.spacer} />
         </View>
       </View>
-    </SafeAreaView>
+
+      <View style={styles.content}>
+        <Flashcard kana={currentKana} onAnswer={handleAnswer} />
+      </View>
+
+      <SafeAreaView style={styles.bottomSafeArea} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  bottomSafeArea: {
     backgroundColor: colors.background.secondary,
-    flex: 1,
+    flex: 0,
+  },
+  closeButton: {
+    alignItems: 'center',
+    height: 32,
+    justifyContent: 'center',
+    width: 32,
+  },
+  closeButtonText: {
+    color: colors.text.secondary,
+    fontSize: fontSize.lg,
+    fontWeight: 'bold',
   },
   content: {
+    backgroundColor: colors.background.secondary,
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: spacing.lg,
   },
   header: {
-    backgroundColor: colors.background.primary,
+    alignItems: 'center',
     borderBottomColor: colors.border.light,
     borderBottomWidth: 1,
+    paddingBottom: spacing.md,
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingTop: spacing.xl,
   },
   headerContent: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  spacer: {
+    width: 32,
+  },
+  titleContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  outerContainer: {
+    backgroundColor: colors.background.secondary,
+    flex: 1,
+  },
   progressText: {
     color: colors.text.secondary,
     fontSize: fontSize.md,
   },
-  safeArea: {
-    backgroundColor: colors.neutral.white,
-    flex: 1,
-  },
   titleText: {
     fontSize: fontSize.lg,
     fontWeight: 'bold',
+  },
+  topSafeArea: {
+    backgroundColor: colors.neutral.white,
+    flex: 0,
   },
 });

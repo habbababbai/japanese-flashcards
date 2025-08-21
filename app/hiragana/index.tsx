@@ -159,6 +159,28 @@ export default function HiraganaSettingsScreen() {
 }
 
 const styles = StyleSheet.create({
+  characterCountButton: {
+    backgroundColor: colors.neutral.gray[200],
+    borderRadius: 20,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  characterCountButtonActive: {
+    backgroundColor: colors.primary.main,
+  },
+  characterCountContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginBottom: spacing.xl,
+  },
+  characterCountText: {
+    fontSize: fontSize.md,
+    fontWeight: '600',
+  },
+  characterCountTextActive: {
+    color: colors.text.inverse,
+  },
   container: {
     backgroundColor: colors.background.primary,
     flex: 1,
@@ -168,6 +190,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl,
   },
+
   header: {
     alignItems: 'center',
     borderBottomColor: colors.border.light,
@@ -215,42 +238,20 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: spacing.lg,
   },
+  startButtonDisabled: {
+    backgroundColor: colors.neutral.gray[300],
+    opacity: 0.7,
+  },
   startButtonText: {
     color: colors.text.inverse,
     fontSize: fontSize.md,
     fontWeight: '600',
   },
+  startButtonTextDisabled: {
+    color: colors.text.tertiary,
+  },
   titleText: {
     fontSize: fontSize.xl,
     fontWeight: 'bold',
-  },
-  characterCountContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-    marginBottom: spacing.xl,
-  },
-  characterCountButton: {
-    backgroundColor: colors.neutral.gray[200],
-    borderRadius: 20,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-  },
-  characterCountButtonActive: {
-    backgroundColor: colors.primary.main,
-  },
-  characterCountText: {
-    fontSize: fontSize.md,
-    fontWeight: '600',
-  },
-  characterCountTextActive: {
-    color: colors.text.inverse,
-  },
-  startButtonDisabled: {
-    backgroundColor: colors.neutral.gray[300],
-    opacity: 0.7,
-  },
-  startButtonTextDisabled: {
-    color: colors.text.tertiary,
   },
 });

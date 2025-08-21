@@ -99,24 +99,15 @@ const studySessionSlice = createSlice({
           incorrectAnswers: incorrectCount,
         };
 
+        // Add the new session and limit to last 10 sessions
         state.sessions.push(completedSession);
-        state.currentSession = null;
 
-        // Update kana progress
-        progress.forEach(p => {
-          if (!state.kanaProgress[p.kanaId]) {
-            state.kanaProgress[p.kanaId] = {
-              correctCount: 0,
-              incorrectCount: 0,
-            };
-          }
-          if (p.isCorrect) {
-            state.kanaProgress[p.kanaId].correctCount += 1;
-          } else {
-            state.kanaProgress[p.kanaId].incorrectCount += 1;
-          }
-          state.kanaProgress[p.kanaId].lastReviewed = p.timestamp;
-        });
+        // Keep only the last 10 sessions (FIFO - remove oldest when over limit)
+        if (state.sessions.length > 10) {
+          state.sessions = state.sessions.slice(-10);
+        }
+
+        state.currentSession = null;
       }
     },
 
@@ -168,7 +159,9 @@ const studySessionSlice = createSlice({
       })
       .addCase(loadStoredData.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.sessions = action.payload.sessions;
+        // Limit to last 10 sessions when loading from storage
+        const sessions = action.payload.sessions;
+        state.sessions = sessions.length > 10 ? sessions.slice(-10) : sessions;
         state.kanaProgress = action.payload.kanaProgress;
       })
       .addCase(loadStoredData.rejected, (state, action) => {
