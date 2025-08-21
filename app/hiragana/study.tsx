@@ -1,49 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Alert } from 'react-native';
-import { Flashcard } from '../components/Flashcard';
-import { Kana, StudyProgress } from '../types';
-import { spacing, fontSize } from '../utils/responsive';
-import { useStorage } from '../hooks/useStorage';
+import { router } from 'expo-router';
+import { Flashcard } from '../../src/components/Flashcard';
+import { Kana, StudyProgress } from '../../src/types';
+import { spacing, fontSize } from '../../src/utils/responsive';
+import { useStorage } from '../../src/hooks/useStorage';
+import { hiraganaData } from '../../src/data/hiragana';
 
-interface StudyScreenProps {
-  kanaList: Kana[];
-  onComplete?: (progress: StudyProgress[]) => void;
-  onBack?: () => void;
-  title?: string;
-  isShuffled?: boolean;
-}
-
-export const StudyScreen: React.FC<StudyScreenProps> = ({
-  kanaList,
-  onComplete,
-  onBack,
-  title = 'Study',
-  isShuffled = true,
-}) => {
+export default function HiraganaStudyScreen() {
   const { saveSession, saveProgress } = useStorage();
 
   const [shuffledKanaList, setShuffledKanaList] = useState<Kana[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState<StudyProgress[]>([]);
 
-  // Initialize with shuffled or ordered list
+  // Initialize with shuffled list
   useEffect(() => {
-    if (isShuffled) {
-      shuffleKanaList();
-    } else {
-      setShuffledKanaList([...kanaList]);
-      setCurrentIndex(0);
-      setProgress([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kanaList, isShuffled]);
-
-  const shuffleKanaList = () => {
-    const shuffled = [...kanaList].sort(() => Math.random() - 0.5);
+    const shuffled = [...hiraganaData].sort(() => Math.random() - 0.5);
     setShuffledKanaList(shuffled);
     setCurrentIndex(0);
     setProgress([]);
-  };
+  }, []);
 
   const currentKana = shuffledKanaList[currentIndex];
   const isLastCard = currentIndex === shuffledKanaList.length - 1;
@@ -54,7 +31,7 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.headerContent}>
-              <Text style={styles.titleText}>{title}</Text>
+              <Text style={styles.titleText}>Hiragana</Text>
               <Text style={styles.progressText}>Loading...</Text>
             </View>
           </View>
@@ -77,29 +54,30 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
 
     if (isLastCard) {
       // Study session complete
-      const endTime = new Date();
       const finalProgress = [...progress, newProgress];
 
       // Save session to storage
       const session = {
         id: Date.now().toString(),
-        kanaType: title.toLowerCase() as 'hiragana' | 'katakana',
+        kanaType: 'hiragana' as const,
         startTime: new Date(),
-        endTime,
+        endTime: new Date(),
         cardsReviewed: finalProgress.length,
         correctAnswers: finalProgress.filter(p => p.isCorrect).length,
         incorrectAnswers: finalProgress.filter(p => !p.isCorrect).length,
       };
       saveSession(session);
 
-      onComplete?.(finalProgress);
+      const correctCount = finalProgress.filter(p => p.isCorrect).length;
+      const totalCount = finalProgress.length;
+
       Alert.alert(
-        'Study Session Complete! 🎉',
-        `You reviewed ${shuffledKanaList.length} ${title.toLowerCase()} characters.`,
+        'Hiragana Study Complete! 🎉',
+        `You got ${correctCount} out of ${totalCount} correct!`,
         [
           {
             text: 'OK',
-            onPress: onBack,
+            onPress: () => router.back(),
           },
         ]
       );
@@ -113,56 +91,53 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <Text style={styles.titleText}>{title}</Text>
+            <Text style={styles.titleText}>Hiragana</Text>
             <Text style={styles.progressText}>
               {currentIndex + 1} / {shuffledKanaList.length}
             </Text>
           </View>
         </View>
 
-        <View style={styles.cardContainer}>
+        <View style={styles.content}>
           <Flashcard kana={currentKana} onAnswer={handleAnswer} />
         </View>
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
   container: {
     backgroundColor: '#f5f5f5',
     flex: 1,
   },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: spacing.lg,
+  },
   header: {
-    alignItems: 'center',
     backgroundColor: 'white',
     borderBottomColor: '#e0e0e0',
     borderBottomWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: spacing.md,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
   },
   headerContent: {
     alignItems: 'center',
-    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   progressText: {
-    color: '#333',
-    fontSize: fontSize.sm,
-    fontWeight: '600',
+    color: '#666',
+    fontSize: fontSize.md,
   },
   safeArea: {
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
     flex: 1,
   },
   titleText: {
-    color: '#333',
     fontSize: fontSize.lg,
-    fontWeight: '700',
-    marginBottom: spacing.xs,
+    fontWeight: 'bold',
   },
 });

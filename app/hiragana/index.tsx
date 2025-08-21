@@ -6,32 +6,21 @@ import {
   StyleSheet,
   SafeAreaView,
 } from 'react-native';
-import { fontSize, spacing } from '../utils/responsive';
+import { router } from 'expo-router';
+import { fontSize, spacing } from '../../src/utils/responsive';
 
-interface StudySettings {
-  isShuffled: boolean;
-}
-
-interface SettingsScreenProps {
-  onStartStudy: (settings: StudySettings) => void;
-  title: string;
-}
-
-export const SettingsScreen: React.FC<SettingsScreenProps> = ({
-  onStartStudy,
-  title,
-}) => {
+export default function HiraganaSettingsScreen() {
   const [isShuffled, setIsShuffled] = useState(false);
 
   const handleStartStudy = () => {
-    onStartStudy({ isShuffled });
+    router.push('/hiragana/study');
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.titleText}>{title} Study</Text>
+          <Text style={styles.titleText}>Hiragana Study</Text>
         </View>
 
         <View style={styles.content}>
@@ -89,7 +78,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -98,44 +87,39 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    padding: spacing.lg,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl,
   },
   header: {
+    alignItems: 'center',
     borderBottomColor: '#e0e0e0',
     borderBottomWidth: 1,
     paddingBottom: spacing.md,
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
+    paddingTop: spacing.xl,
   },
   optionButton: {
-    alignItems: 'center',
-    backgroundColor: '#f8f9fa',
-    borderColor: '#e0e0e0',
+    backgroundColor: '#f5f5f5',
     borderRadius: 12,
-    borderWidth: 2,
-    marginBottom: spacing.md,
     padding: spacing.lg,
   },
   optionButtonActive: {
-    backgroundColor: '#e3f2fd',
-    borderColor: '#4A90E2',
+    backgroundColor: '#4A90E2',
   },
   optionDescription: {
-    color: '#999',
+    color: '#666',
     fontSize: fontSize.sm,
-    textAlign: 'center',
   },
   optionText: {
-    color: '#666',
     fontSize: fontSize.md,
     fontWeight: '600',
     marginBottom: spacing.xs,
   },
   optionTextActive: {
-    color: '#4A90E2',
+    color: 'white',
   },
   optionsContainer: {
+    gap: spacing.md,
     marginBottom: spacing.xl,
   },
   safeArea: {
@@ -143,18 +127,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sectionTitle: {
-    color: '#333',
     fontSize: fontSize.lg,
     fontWeight: '600',
-    marginBottom: spacing.lg,
-    textAlign: 'center',
+    marginBottom: spacing.md,
   },
   startButton: {
     alignItems: 'center',
     backgroundColor: '#4A90E2',
     borderRadius: 12,
-    marginTop: spacing.lg,
-    paddingHorizontal: spacing.xl,
     paddingVertical: spacing.lg,
   },
   startButtonText: {
@@ -163,9 +143,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   titleText: {
-    color: '#333',
     fontSize: fontSize.xl,
     fontWeight: 'bold',
-    textAlign: 'center',
   },
 });

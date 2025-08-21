@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { useStorage } from '../hooks/useStorage';
-import { spacing, fontSize } from '../utils/responsive';
+import { useStorage } from '../src/hooks/useStorage';
+import { spacing, fontSize } from '../src/utils/responsive';
 
-export const StatsScreen: React.FC = () => {
+export default function StatsScreen() {
   const { sessions, kanaProgress, isLoading } = useStorage();
 
   const totalStudyTime = sessions.reduce((total, session) => {
@@ -118,6 +118,7 @@ export const StatsScreen: React.FC = () => {
           ) : (
             <View style={styles.listContainer}>
               <FlashList
+                estimatedItemSize={86}
                 data={recentSessions}
                 renderItem={({ item: session }) => (
                   <View style={styles.sessionCard}>
@@ -166,6 +167,7 @@ export const StatsScreen: React.FC = () => {
           ) : (
             <View style={styles.listContainer}>
               <FlashList
+                estimatedItemSize={86}
                 data={kanaProgressData}
                 renderItem={({ item }) => (
                   <View style={styles.kanaProgressItem}>
@@ -189,7 +191,7 @@ export const StatsScreen: React.FC = () => {
       </ScrollView>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
