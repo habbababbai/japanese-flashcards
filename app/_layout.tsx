@@ -5,17 +5,18 @@ import { Text } from 'react-native';
 import { hiraganaData } from '../src/data/hiragana';
 import { katakanaData } from '../src/data/katakana';
 import { hp, fontSize } from '../src/utils/responsive';
+import { colors } from '../src/utils/colors';
 
 export default function RootLayout() {
   return (
     <Provider store={store}>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: '#4A90E2',
-          tabBarInactiveTintColor: '#999',
+          tabBarActiveTintColor: colors.primary.main,
+          tabBarInactiveTintColor: colors.text.tertiary,
           tabBarStyle: {
-            backgroundColor: 'white',
-            borderTopColor: '#e0e0e0',
+            backgroundColor: colors.background.primary,
+            borderTopColor: colors.border.light,
             borderTopWidth: 1,
             height: hp(10),
             paddingBottom: hp(1),

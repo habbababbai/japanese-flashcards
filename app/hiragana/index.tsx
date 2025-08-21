@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { fontSize, spacing } from '../../src/utils/responsive';
+import { colors } from '../../src/utils/colors';
 
 export default function HiraganaSettingsScreen() {
   const [isShuffled, setIsShuffled] = useState(false);
@@ -82,7 +83,7 @@ export default function HiraganaSettingsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: colors.background.primary,
     flex: 1,
   },
   content: {
@@ -92,22 +93,22 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: colors.border.light,
     borderBottomWidth: 1,
     paddingBottom: spacing.md,
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl,
   },
   optionButton: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.neutral.gray[100],
     borderRadius: 12,
     padding: spacing.lg,
   },
   optionButtonActive: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: colors.primary.main,
   },
   optionDescription: {
-    color: '#666',
+    color: colors.text.secondary,
     fontSize: fontSize.sm,
   },
   optionText: {
@@ -116,14 +117,14 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   optionTextActive: {
-    color: 'white',
+    color: colors.text.inverse,
   },
   optionsContainer: {
     gap: spacing.md,
     marginBottom: spacing.xl,
   },
   safeArea: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFFFFF',
     flex: 1,
   },
   sectionTitle: {
@@ -133,12 +134,12 @@ const styles = StyleSheet.create({
   },
   startButton: {
     alignItems: 'center',
-    backgroundColor: '#4A90E2',
+    backgroundColor: colors.primary.main,
     borderRadius: 12,
     paddingVertical: spacing.lg,
   },
   startButtonText: {
-    color: 'white',
+    color: colors.text.inverse,
     fontSize: fontSize.md,
     fontWeight: '600',
   },

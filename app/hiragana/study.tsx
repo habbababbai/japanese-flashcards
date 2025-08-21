@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { Flashcard } from '../../src/components/Flashcard';
 import { Kana, StudyProgress } from '../../src/types';
 import { spacing, fontSize } from '../../src/utils/responsive';
+import { colors } from '../../src/utils/colors';
 import { useStorage } from '../../src/hooks/useStorage';
 import { hiraganaData } from '../../src/data/hiragana';
 
@@ -108,7 +109,7 @@ export default function HiraganaStudyScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background.secondary,
     flex: 1,
   },
   content: {
@@ -117,8 +118,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
   },
   header: {
-    backgroundColor: 'white',
-    borderBottomColor: '#e0e0e0',
+    backgroundColor: colors.background.primary,
+    borderBottomColor: colors.border.light,
     borderBottomWidth: 1,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
@@ -129,11 +130,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   progressText: {
-    color: '#666',
+    color: colors.text.secondary,
     fontSize: fontSize.md,
   },
   safeArea: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFFFFF',
     flex: 1,
   },
   titleText: {
