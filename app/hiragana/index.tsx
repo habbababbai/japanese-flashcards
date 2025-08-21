@@ -85,9 +85,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
   },
-  safeArea: {
-    backgroundColor: 'white',
+  content: {
     flex: 1,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl,
   },
   header: {
     alignItems: 'center',
@@ -97,24 +98,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl,
   },
-  titleText: {
-    fontSize: fontSize.xl,
-    fontWeight: 'bold',
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xl,
-  },
-  sectionTitle: {
-    fontSize: fontSize.lg,
-    fontWeight: '600',
-    marginBottom: spacing.md,
-  },
-  optionsContainer: {
-    gap: spacing.md,
-    marginBottom: spacing.xl,
-  },
   optionButton: {
     backgroundColor: '#f5f5f5',
     borderRadius: 12,
@@ -122,6 +105,10 @@ const styles = StyleSheet.create({
   },
   optionButtonActive: {
     backgroundColor: '#4A90E2',
+  },
+  optionDescription: {
+    color: '#666',
+    fontSize: fontSize.sm,
   },
   optionText: {
     fontSize: fontSize.md,
@@ -131,19 +118,32 @@ const styles = StyleSheet.create({
   optionTextActive: {
     color: 'white',
   },
-  optionDescription: {
-    color: '#666',
-    fontSize: fontSize.sm,
+  optionsContainer: {
+    gap: spacing.md,
+    marginBottom: spacing.xl,
+  },
+  safeArea: {
+    backgroundColor: 'white',
+    flex: 1,
+  },
+  sectionTitle: {
+    fontSize: fontSize.lg,
+    fontWeight: '600',
+    marginBottom: spacing.md,
   },
   startButton: {
+    alignItems: 'center',
     backgroundColor: '#4A90E2',
     borderRadius: 12,
     paddingVertical: spacing.lg,
-    alignItems: 'center',
   },
   startButtonText: {
     color: 'white',
     fontSize: fontSize.md,
     fontWeight: '600',
+  },
+  titleText: {
+    fontSize: fontSize.xl,
+    fontWeight: 'bold',
   },
 });

@@ -107,13 +107,14 @@ export default function HiraganaStudyScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    backgroundColor: '#f5f5f5',
-    flex: 1,
-  },
   container: {
     backgroundColor: '#f5f5f5',
     flex: 1,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: spacing.lg,
   },
   header: {
     backgroundColor: 'white',
@@ -127,17 +128,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  titleText: {
-    fontSize: fontSize.lg,
-    fontWeight: 'bold',
-  },
   progressText: {
     color: '#666',
     fontSize: fontSize.md,
   },
-  content: {
+  safeArea: {
+    backgroundColor: '#f5f5f5',
     flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: spacing.lg,
+  },
+  titleText: {
+    fontSize: fontSize.lg,
+    fontWeight: 'bold',
   },
 });
