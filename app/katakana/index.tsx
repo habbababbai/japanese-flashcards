@@ -9,17 +9,29 @@ import {
 import { router } from 'expo-router';
 import { fontSize, spacing } from '../../src/utils/responsive';
 import { colors } from '../../src/utils/colors';
-
-interface StudySettings {
-  isShuffled: boolean;
-}
+import { StudyOptions } from '../../src/types';
 
 export default function KatakanaSettingsScreen() {
   const [isShuffled, setIsShuffled] = useState(false);
+  const [characterCount, setCharacterCount] = useState<number | undefined>(
+    undefined
+  );
+  const [characterCountSelected, setCharacterCountSelected] = useState(false);
 
   const handleStartStudy = () => {
-    router.push('/katakana/study');
+    const studyOptions: StudyOptions = {
+      isShuffled,
+      characterCount: isShuffled ? characterCount : undefined,
+    };
+
+    // Navigate to study screen with study options
+    router.push({
+      pathname: '/katakana/study',
+      params: { studyOptions: JSON.stringify(studyOptions) },
+    });
   };
+
+  const characterCountOptions = [10, 20, 30, 'All'];
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -37,7 +49,11 @@ export default function KatakanaSettingsScreen() {
                 styles.optionButton,
                 !isShuffled && styles.optionButtonActive,
               ]}
-              onPress={() => setIsShuffled(false)}
+              onPress={() => {
+                setIsShuffled(false);
+                setCharacterCount(undefined);
+                setCharacterCountSelected(false);
+              }}
             >
               <Text
                 style={[
@@ -57,7 +73,11 @@ export default function KatakanaSettingsScreen() {
                 styles.optionButton,
                 isShuffled && styles.optionButtonActive,
               ]}
-              onPress={() => setIsShuffled(true)}
+              onPress={() => {
+                setIsShuffled(true);
+                setCharacterCount(undefined); // "All" is selected by default
+                setCharacterCountSelected(true);
+              }}
             >
               <Text
                 style={[
@@ -73,11 +93,64 @@ export default function KatakanaSettingsScreen() {
             </TouchableOpacity>
           </View>
 
+          {isShuffled && (
+            <>
+              <Text style={styles.sectionTitle}>Number of Characters</Text>
+              <View style={styles.characterCountContainer}>
+                {characterCountOptions.map(option => (
+                  <TouchableOpacity
+                    key={option}
+                    style={[
+                      styles.characterCountButton,
+                      (option === 'All'
+                        ? characterCount === undefined
+                        : characterCount === option) &&
+                        styles.characterCountButtonActive,
+                    ]}
+                    onPress={() => {
+                      setCharacterCount(
+                        option === 'All' ? undefined : (option as number)
+                      );
+                      setCharacterCountSelected(true);
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.characterCountText,
+                        (option === 'All'
+                          ? characterCount === undefined
+                          : characterCount === option) &&
+                          styles.characterCountTextActive,
+                      ]}
+                    >
+                      {option}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </>
+          )}
+
           <TouchableOpacity
-            style={styles.startButton}
+            style={[
+              styles.startButton,
+              isShuffled &&
+                !characterCountSelected &&
+                styles.startButtonDisabled,
+            ]}
             onPress={handleStartStudy}
+            disabled={isShuffled && !characterCountSelected}
           >
-            <Text style={styles.startButtonText}>Start Studying</Text>
+            <Text
+              style={[
+                styles.startButtonText,
+                isShuffled &&
+                  !characterCountSelected &&
+                  styles.startButtonTextDisabled,
+              ]}
+            >
+              Start Studying
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -146,6 +219,35 @@ const styles = StyleSheet.create({
     color: colors.text.inverse,
     fontSize: fontSize.md,
     fontWeight: '600',
+  },
+  startButtonDisabled: {
+    backgroundColor: colors.neutral.gray[300],
+    opacity: 0.7,
+  },
+  startButtonTextDisabled: {
+    color: colors.text.tertiary,
+  },
+  characterCountContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginBottom: spacing.xl,
+  },
+  characterCountButton: {
+    backgroundColor: colors.neutral.gray[200],
+    borderRadius: 20,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+  },
+  characterCountButtonActive: {
+    backgroundColor: colors.primary.main,
+  },
+  characterCountText: {
+    fontSize: fontSize.md,
+    fontWeight: '600',
+  },
+  characterCountTextActive: {
+    color: colors.text.inverse,
   },
   titleText: {
     fontSize: fontSize.xl,

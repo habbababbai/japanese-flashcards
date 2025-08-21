@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Alert } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Flashcard } from '../../src/components/Flashcard';
-import { Kana, StudyProgress } from '../../src/types';
+import { Kana, StudyProgress, StudyOptions } from '../../src/types';
 import { spacing, fontSize } from '../../src/utils/responsive';
 import { colors } from '../../src/utils/colors';
 import { useAppDispatch } from '../../src/hooks/useRedux';
@@ -15,15 +15,39 @@ import { katakanaData } from '../../src/data/katakana';
 
 export default function KatakanaStudyScreen() {
   const dispatch = useAppDispatch();
+  const params = useLocalSearchParams();
 
   const [shuffledKanaList, setShuffledKanaList] = useState<Kana[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState<StudyProgress[]>([]);
 
+  // Parse study options from router params
+  const studyOptions: StudyOptions = useMemo(() => {
+    return params.studyOptions
+      ? JSON.parse(params.studyOptions as string)
+      : { isShuffled: true };
+  }, [params.studyOptions]);
+
   // Initialize with shuffled list and start session
   useEffect(() => {
-    const shuffled = [...katakanaData].sort(() => Math.random() - 0.5);
-    setShuffledKanaList(shuffled);
+    let kanaToStudy: Kana[];
+
+    if (studyOptions.isShuffled) {
+      // Shuffle the data
+      const shuffled = [...katakanaData].sort(() => Math.random() - 0.5);
+
+      // Limit to character count if specified
+      if (studyOptions.characterCount) {
+        kanaToStudy = shuffled.slice(0, studyOptions.characterCount);
+      } else {
+        kanaToStudy = shuffled;
+      }
+    } else {
+      // Use all characters in order
+      kanaToStudy = [...katakanaData];
+    }
+
+    setShuffledKanaList(kanaToStudy);
     setCurrentIndex(0);
     setProgress([]);
 
@@ -31,10 +55,10 @@ export default function KatakanaStudyScreen() {
     dispatch(
       startSession({
         kanaType: 'katakana',
-        isShuffled: true,
+        studyOptions,
       })
     );
-  }, [dispatch]);
+  }, [dispatch, studyOptions]);
 
   const currentKana = shuffledKanaList[currentIndex];
   const isLastCard = currentIndex === shuffledKanaList.length - 1;

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { StudySession, StudyProgress } from '../../types';
+import { StudySession, StudyProgress, StudyOptions } from '../../types';
 import { storageUtils } from '../storage';
 
 interface StudySessionState {
@@ -67,7 +67,7 @@ const studySessionSlice = createSlice({
       state,
       action: PayloadAction<{
         kanaType: 'hiragana' | 'katakana';
-        isShuffled: boolean;
+        studyOptions: StudyOptions;
       }>
     ) => {
       const newSession: StudySession = {
@@ -77,6 +77,7 @@ const studySessionSlice = createSlice({
         cardsReviewed: 0,
         correctAnswers: 0,
         incorrectAnswers: 0,
+        studyOptions: action.payload.studyOptions,
       };
       state.currentSession = newSession;
     },
