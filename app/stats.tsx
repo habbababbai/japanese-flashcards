@@ -118,6 +118,7 @@ export default function StatsScreen() {
           ) : (
             <View style={styles.listContainer}>
               <FlashList
+                estimatedItemSize={86}
                 data={recentSessions}
                 renderItem={({ item: session }) => (
                   <View style={styles.sessionCard}>
@@ -166,6 +167,7 @@ export default function StatsScreen() {
           ) : (
             <View style={styles.listContainer}>
               <FlashList
+                estimatedItemSize={86}
                 data={kanaProgressData}
                 renderItem={({ item }) => (
                   <View style={styles.kanaProgressItem}>
