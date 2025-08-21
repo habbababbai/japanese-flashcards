@@ -5,6 +5,11 @@ import {
 import { Dimensions } from 'react-native';
 
 export { wp, hp };
+
+// Screen dimensions
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+export { screenWidth, screenHeight };
+
 export const fp = (percent: number) => {
   const { width } = Dimensions.get('window');
   const baseWidth = 375; // iPhone X width as base
