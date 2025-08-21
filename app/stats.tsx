@@ -15,6 +15,7 @@ export default function StatsScreen() {
   useFocusEffect(
     React.useCallback(() => {
       loadData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   );
 

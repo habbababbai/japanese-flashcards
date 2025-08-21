@@ -39,6 +39,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
     answerButtonsOpacity.value = 1;
     cardScale.value = 1;
     cardOpacity.value = 1;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kana.id]);
 
   const handleFlip = () => {
@@ -143,7 +144,9 @@ export const Flashcard: React.FC<FlashcardProps> = ({
                 styles.cardBack,
                 backAnimatedStyle,
                 userAnswer !== null && {
-                  backgroundColor: userAnswer ? '#4CAF50' : '#F44336',
+                  backgroundColor: userAnswer
+                    ? colors.success.main
+                    : colors.error.main,
                 },
               ]}
             >
@@ -250,7 +253,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   hintText: {
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: colors.neutral.white,
     fontSize: fontSize.sm,
     fontStyle: 'italic',
     textAlign: 'center',
