@@ -9,10 +9,6 @@ import {
 import { router } from 'expo-router';
 import { fontSize, spacing } from '../../src/utils/responsive';
 
-interface StudySettings {
-  isShuffled: boolean;
-}
-
 export default function HiraganaSettingsScreen() {
   const [isShuffled, setIsShuffled] = useState(false);
 
@@ -85,11 +81,11 @@ export default function HiraganaSettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
     backgroundColor: 'white',
     flex: 1,
   },
-  container: {
+  safeArea: {
     backgroundColor: 'white',
     flex: 1,
   },
