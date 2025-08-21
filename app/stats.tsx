@@ -2,12 +2,10 @@ import React, { useMemo, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useAppSelector } from '../src/hooks/useRedux';
-import { loadStoredData } from '../src/store/slices/studySessionSlice';
 import { spacing, fontSize } from '../src/utils/responsive';
 import { colors } from '../src/utils/colors';
 import { hiraganaData } from '../src/data/hiragana';
 import { katakanaData } from '../src/data/katakana';
-import { useFocusEffect } from 'expo-router';
 
 export default function StatsScreen() {
   const sessions = useAppSelector(state => state.studySession.sessions);
@@ -18,24 +16,6 @@ export default function StatsScreen() {
   useEffect(() => {
     // Data will be loaded automatically by the store
   }, []);
-
-  // Function to get kana character and romaji from ID
-  const getKanaInfo = (kanaId: string) => {
-    // Check hiragana first
-    const hiragana = hiraganaData.find(k => k.id === kanaId);
-    if (hiragana) {
-      return { character: hiragana.character, romaji: hiragana.romaji };
-    }
-
-    // Check katakana
-    const katakana = katakanaData.find(k => k.id === kanaId);
-    if (katakana) {
-      return { character: katakana.character, romaji: katakana.romaji };
-    }
-
-    // Fallback to ID if not found
-    return { character: kanaId, romaji: '' };
-  };
 
   const totalStudyTime = sessions.reduce((total, session) => {
     if (session.endTime) {
@@ -95,14 +75,52 @@ export default function StatsScreen() {
       };
     });
 
-    // Sort by total attempts (most studied first), then by type
-    return allProgressData.sort((a, b) => {
-      if (b.total !== a.total) {
-        return b.total - a.total;
-      }
-      // If same total, sort by type (hiragana first)
-      return a.type === 'hiragana' ? -1 : 1;
-    });
+    // Filter out characters with no practice, then sort by type, frequency, and groups
+    return allProgressData
+      .filter(item => item.total > 0) // Only show practiced characters
+      .sort((a, b) => {
+        // First sort by type (hiragana before katakana)
+        if (a.type !== b.type) {
+          return a.type === 'hiragana' ? -1 : 1;
+        }
+
+        // Then sort by total attempts (most studied first)
+        if (b.total !== a.total) {
+          return b.total - a.total;
+        }
+
+        // If same total, sort by character groups
+        const getGroupOrder = (romaji: string) => {
+          const firstChar = romaji.charAt(0);
+          const groupOrder = [
+            'a',
+            'i',
+            'u',
+            'e',
+            'o',
+            'k',
+            's',
+            't',
+            'n',
+            'h',
+            'm',
+            'y',
+            'r',
+            'w',
+          ];
+          return groupOrder.indexOf(firstChar);
+        };
+
+        const aGroupOrder = getGroupOrder(a.romaji);
+        const bGroupOrder = getGroupOrder(b.romaji);
+
+        if (aGroupOrder !== bGroupOrder) {
+          return aGroupOrder - bGroupOrder;
+        }
+
+        // If same group, sort by romaji
+        return a.romaji.localeCompare(b.romaji);
+      });
   }, [kanaProgress]);
 
   if (isLoading) {
@@ -202,8 +220,8 @@ export default function StatsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Character Progress</Text>
           <Text style={styles.sectionSubtitle}>
-            All characters ({kanaProgressData.length} total) - Sorted by study
-            frequency
+            Practiced characters ({kanaProgressData.length} total) - Sorted by
+            study frequency
           </Text>
           {kanaProgressData.length === 0 ? (
             <Text style={styles.emptyText}>No characters available</Text>
