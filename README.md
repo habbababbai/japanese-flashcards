@@ -83,8 +83,8 @@ src/
 - [x] Navigation between screens
 - [x] Responsive design
 - [x] Shuffle functionality
-- [ ] Persistent progress storage
-- [ ] Progress statistics screen
+- [x] Persistent progress storage
+- [x] Progress statistics screen
 - [ ] Kanji support (future)
 - [ ] Spaced repetition (future)
 

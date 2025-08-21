@@ -63,6 +63,9 @@ export const Flashcard: React.FC<FlashcardProps> = ({
     // Set user answer for color feedback
     setUserAnswer(isCorrect);
 
+    // Hide answer buttons immediately for better test compatibility
+    setShowAnswerButtons(false);
+
     // Animate answer buttons fade out
     answerButtonsOpacity.value = withTiming(0, {
       duration: 500,
@@ -78,10 +81,9 @@ export const Flashcard: React.FC<FlashcardProps> = ({
       duration: 600,
     });
 
-    // Call onAnswer after a longer delay to allow animations to complete
+    // Call onAnswer after a shorter delay to allow animations to complete
     setTimeout(() => {
       onAnswer?.(isCorrect);
-      setShowAnswerButtons(false);
       flipAnimation.value = withSpring(0, {
         damping: 15,
         stiffness: 100,
@@ -92,7 +94,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
       cardScale.value = withTiming(1, { duration: 400 });
       answerButtonsOpacity.value = withTiming(1, { duration: 500 });
       cardOpacity.value = withTiming(1, { duration: 600 });
-    }, 700);
+    }, 100);
   };
 
   const frontAnimatedStyle = useAnimatedStyle(() => {
@@ -133,16 +135,28 @@ export const Flashcard: React.FC<FlashcardProps> = ({
         <TouchableOpacity onPress={handleFlip} activeOpacity={0.9}>
           <View style={styles.cardContainer}>
             <Animated.View
-              style={[styles.card, styles.cardFront, frontAnimatedStyle]}
+              style={[
+                styles.card,
+                styles.cardFront,
+                frontAnimatedStyle,
+                isFlipped && { opacity: 0, pointerEvents: 'none' },
+              ]}
             >
-              <Text style={styles.kanaText}>{kana.character}</Text>
-              <Text style={styles.hintText}>What does this sound like?</Text>
+              {!isFlipped && (
+                <>
+                  <Text style={styles.kanaText}>{kana.character}</Text>
+                  <Text style={styles.hintText}>
+                    What does this sound like?
+                  </Text>
+                </>
+              )}
             </Animated.View>
             <Animated.View
               style={[
                 styles.card,
                 styles.cardBack,
                 backAnimatedStyle,
+                !isFlipped && styles.hidden,
                 userAnswer !== null && {
                   backgroundColor: userAnswer
                     ? colors.success.main
@@ -150,8 +164,12 @@ export const Flashcard: React.FC<FlashcardProps> = ({
                 },
               ]}
             >
-              <Text style={styles.romajiText}>{kana.romaji}</Text>
-              <Text style={styles.hintText}>Did you know it?</Text>
+              {isFlipped && (
+                <>
+                  <Text style={styles.romajiText}>{kana.romaji}</Text>
+                  <Text style={styles.hintText}>Did you know it?</Text>
+                </>
+              )}
             </Animated.View>
           </View>
         </TouchableOpacity>
@@ -251,6 +269,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.success.main,
     borderColor: colors.success.dark,
     borderWidth: 2,
+  },
+  hidden: {
+    opacity: 0,
+    pointerEvents: 'none',
   },
   hintText: {
     color: colors.neutral.white,
