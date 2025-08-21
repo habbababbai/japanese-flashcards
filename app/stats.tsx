@@ -6,9 +6,17 @@ import { spacing, fontSize } from '../src/utils/responsive';
 import { colors } from '../src/utils/colors';
 import { hiraganaData } from '../src/data/hiragana';
 import { katakanaData } from '../src/data/katakana';
+import { useFocusEffect } from 'expo-router';
 
 export default function StatsScreen() {
-  const { sessions, kanaProgress, isLoading } = useStorage();
+  const { sessions, kanaProgress, isLoading, loadData } = useStorage();
+
+  // Refresh data when screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      loadData();
+    }, [])
+  );
 
   // Function to get kana character and romaji from ID
   const getKanaInfo = (kanaId: string) => {
