@@ -22,18 +22,19 @@ function TabLayout() {
         tabBarInactiveTintColor: colors.text.tertiary,
         tabBarStyle: {
           backgroundColor: colors.background.primary,
-          borderTopColor: colors.border.light,
-          borderTopWidth: 1,
+          borderTopColor: isStudySessionActive
+            ? 'transparent'
+            : colors.border.light,
+          borderTopWidth: isStudySessionActive ? 0 : 1,
           height: hp(10),
           paddingBottom: hp(1),
           paddingTop: hp(1),
-          // Hide tab bar when study session is active
-          display: isStudySessionActive ? 'none' : 'flex',
         },
         tabBarLabelStyle: {
           fontSize: fontSize.xs,
           fontWeight: '600',
         },
+        tabBarButton: isStudySessionActive ? () => null : undefined,
         headerShown: false,
       })}
     >
