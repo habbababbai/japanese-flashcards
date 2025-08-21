@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -42,7 +42,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kana.id]);
 
-  const handleFlip = () => {
+  const handleFlip = useCallback(() => {
     const toValue = isFlipped ? 0 : 1;
     flipAnimation.value = withSpring(toValue, {
       damping: 15,
@@ -57,45 +57,48 @@ export const Flashcard: React.FC<FlashcardProps> = ({
     }
 
     onFlip?.();
-  };
+  }, [isFlipped, flipAnimation, onFlip]);
 
-  const handleAnswer = (isCorrect: boolean) => {
-    // Set user answer for color feedback
-    setUserAnswer(isCorrect);
+  const handleAnswer = useCallback(
+    (isCorrect: boolean) => {
+      // Set user answer for color feedback
+      setUserAnswer(isCorrect);
 
-    // Hide answer buttons immediately for better test compatibility
-    setShowAnswerButtons(false);
+      // Hide answer buttons immediately for better test compatibility
+      setShowAnswerButtons(false);
 
-    // Animate answer buttons fade out
-    answerButtonsOpacity.value = withTiming(0, {
-      duration: 500,
-    });
-
-    // Animate card scale down slightly
-    cardScale.value = withTiming(0.95, {
-      duration: 400,
-    });
-
-    // Animate card fade out
-    cardOpacity.value = withTiming(0, {
-      duration: 600,
-    });
-
-    // Call onAnswer after a shorter delay to allow animations to complete
-    setTimeout(() => {
-      onAnswer?.(isCorrect);
-      flipAnimation.value = withSpring(0, {
-        damping: 15,
-        stiffness: 100,
+      // Animate answer buttons fade out
+      answerButtonsOpacity.value = withTiming(0, {
+        duration: 500,
       });
-      setIsFlipped(false);
 
-      // Reset animations for next card
-      cardScale.value = withTiming(1, { duration: 400 });
-      answerButtonsOpacity.value = withTiming(1, { duration: 500 });
-      cardOpacity.value = withTiming(1, { duration: 600 });
-    }, 500);
-  };
+      // Animate card scale down slightly
+      cardScale.value = withTiming(0.95, {
+        duration: 400,
+      });
+
+      // Animate card fade out
+      cardOpacity.value = withTiming(0, {
+        duration: 600,
+      });
+
+      // Call onAnswer after a shorter delay to allow animations to complete
+      setTimeout(() => {
+        onAnswer?.(isCorrect);
+        flipAnimation.value = withSpring(0, {
+          damping: 15,
+          stiffness: 100,
+        });
+        setIsFlipped(false);
+
+        // Reset animations for next card
+        cardScale.value = withTiming(1, { duration: 400 });
+        answerButtonsOpacity.value = withTiming(1, { duration: 500 });
+        cardOpacity.value = withTiming(1, { duration: 600 });
+      }, 500);
+    },
+    [onAnswer, answerButtonsOpacity, cardScale, cardOpacity, flipAnimation]
+  );
 
   const frontAnimatedStyle = useAnimatedStyle(() => {
     const rotateY = interpolate(flipAnimation.value, [0, 1], [0, 180]);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { Flashcard } from '../../src/components/Flashcard';
@@ -39,6 +39,51 @@ export default function KatakanaStudyScreen() {
   const currentKana = shuffledKanaList[currentIndex];
   const isLastCard = currentIndex === shuffledKanaList.length - 1;
 
+  const handleAnswer = useCallback(
+    (isCorrect: boolean) => {
+      const newProgress: StudyProgress = {
+        kanaId: currentKana.id,
+        isCorrect,
+        responseTime: Date.now(),
+        timestamp: new Date().toISOString(),
+      };
+
+      // Dispatch progress to Redux
+      dispatch(addProgress(newProgress));
+      setProgress(prev => [...prev, newProgress]);
+
+      if (isLastCard) {
+        // Study session complete
+        const finalProgress = [...progress, newProgress];
+
+        // End session in Redux
+        dispatch(
+          endSession({
+            endTime: new Date().toISOString(),
+            progress: finalProgress,
+          })
+        );
+
+        const correctCount = finalProgress.filter(p => p.isCorrect).length;
+        const totalCount = finalProgress.length;
+
+        Alert.alert(
+          'Katakana Study Complete! 🎉',
+          `You got ${correctCount} out of ${totalCount} correct!`,
+          [
+            {
+              text: 'OK',
+              onPress: () => router.back(),
+            },
+          ]
+        );
+      } else {
+        setCurrentIndex(prev => prev + 1);
+      }
+    },
+    [currentKana, isLastCard, progress, dispatch]
+  );
+
   if (!currentKana) {
     return (
       <SafeAreaView style={styles.safeArea}>
@@ -53,48 +98,6 @@ export default function KatakanaStudyScreen() {
       </SafeAreaView>
     );
   }
-
-  const handleAnswer = (isCorrect: boolean) => {
-    const newProgress: StudyProgress = {
-      kanaId: currentKana.id,
-      isCorrect,
-      responseTime: Date.now(),
-      timestamp: new Date().toISOString(),
-    };
-
-    // Dispatch progress to Redux
-    dispatch(addProgress(newProgress));
-    setProgress([...progress, newProgress]);
-
-    if (isLastCard) {
-      // Study session complete
-      const finalProgress = [...progress, newProgress];
-
-      // End session in Redux
-      dispatch(
-        endSession({
-          endTime: new Date(),
-          progress: finalProgress,
-        })
-      );
-
-      const correctCount = finalProgress.filter(p => p.isCorrect).length;
-      const totalCount = finalProgress.length;
-
-      Alert.alert(
-        'Katakana Study Complete! 🎉',
-        `You got ${correctCount} out of ${totalCount} correct!`,
-        [
-          {
-            text: 'OK',
-            onPress: () => router.back(),
-          },
-        ]
-      );
-    } else {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -143,7 +146,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize.md,
   },
   safeArea: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.neutral.white,
     flex: 1,
   },
   titleText: {

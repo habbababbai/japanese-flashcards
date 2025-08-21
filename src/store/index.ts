@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, Middleware, AnyAction } from '@reduxjs/toolkit';
 import studySessionReducer from './slices/studySessionSlice';
 
 // Custom middleware for logging Redux actions and state changes
-const loggerMiddleware = (store: any) => (next: any) => (action: any) => {
+const loggerMiddleware: Middleware = store => next => action => {
   if (process.env.NODE_ENV === 'development') {
-    console.group(`🔴 Redux Action: ${action.type}`);
+    console.group(`🔴 Redux Action: ${(action as AnyAction).type}`);
     console.log('📤 Dispatching:', action);
     const result = next(action);
     console.log('📥 New State:', store.getState());
@@ -38,7 +38,7 @@ export const store = configureStore({
 
 // Development-only: expose store for debugging
 if (process.env.NODE_ENV === 'development') {
-  (global as any).__REDUX_STORE__ = store;
+  (global as { __REDUX_STORE__?: typeof store }).__REDUX_STORE__ = store;
 }
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import studySessionReducer from '../src/store/slices/studySessionSlice';
 import StatsScreen from '../app/stats';
+import type { RootState } from '../src/store';
 
 // Mock React Native components
 jest.mock('react-native', () => ({
@@ -12,8 +13,8 @@ jest.mock('react-native', () => ({
   View: 'View',
   Text: 'Text',
   StyleSheet: {
-    create: (styles: any) => styles,
-    flatten: (style: any) => style,
+    create: (styles: Record<string, unknown>) => styles,
+    flatten: (style: Record<string, unknown>) => style,
   },
 }));
 
@@ -40,14 +41,22 @@ jest.mock('../src/data/katakana', () => ({
 
 // Mock FlashList to render data directly
 jest.mock('@shopify/flash-list', () => ({
-  FlashList: ({ data, renderItem }: any) => {
-    return data?.map((item: any, index: number) => (
-      <div key={item.kanaId || index}>{renderItem({ item })}</div>
+  FlashList: ({
+    data,
+    renderItem,
+  }: {
+    data: unknown[];
+    renderItem: (props: { item: unknown }) => React.ReactElement;
+  }) => {
+    return data?.map((item: unknown, index: number) => (
+      <div key={(item as { kanaId?: string })?.kanaId || index}>
+        {renderItem({ item })}
+      </div>
     ));
   },
 }));
 
-const createTestStore = (initialState: any) => {
+const createTestStore = (initialState: RootState['studySession']) => {
   return configureStore({
     reducer: {
       studySession: studySessionReducer,
@@ -59,7 +68,7 @@ const createTestStore = (initialState: any) => {
 };
 
 describe('StatsScreen', () => {
-  const renderWithStore = (initialState: any) => {
+  const renderWithStore = (initialState: RootState['studySession']) => {
     const store = createTestStore(initialState);
     return render(
       <Provider store={store}>
@@ -136,7 +145,7 @@ describe('StatsScreen', () => {
       const sessions = [
         {
           id: '1',
-          kanaType: 'hiragana',
+          kanaType: 'hiragana' as const,
           startTime: '2023-01-01T10:00:00.000Z',
           endTime: '2023-01-01T10:05:00.000Z', // 5 minutes
           cardsReviewed: 10,
@@ -145,7 +154,7 @@ describe('StatsScreen', () => {
         },
         {
           id: '2',
-          kanaType: 'katakana',
+          kanaType: 'katakana' as const,
           startTime: '2023-01-01T11:00:00.000Z',
           endTime: '2023-01-01T11:03:00.000Z', // 3 minutes
           cardsReviewed: 5,
@@ -172,7 +181,7 @@ describe('StatsScreen', () => {
       const sessions = [
         {
           id: '1',
-          kanaType: 'hiragana',
+          kanaType: 'hiragana' as const,
           startTime: '2023-01-01T10:00:00.000Z',
           endTime: '2023-01-01T10:05:00.000Z',
           cardsReviewed: 10,
@@ -199,7 +208,7 @@ describe('StatsScreen', () => {
       const sessions = [
         {
           id: '1',
-          kanaType: 'hiragana',
+          kanaType: 'hiragana' as const,
           startTime: '2023-01-01T10:00:00.000Z',
           endTime: '2023-01-01T10:05:00.000Z',
           cardsReviewed: 10,
@@ -208,7 +217,7 @@ describe('StatsScreen', () => {
         },
         {
           id: '2',
-          kanaType: 'katakana',
+          kanaType: 'katakana' as const,
           startTime: '2023-01-01T11:00:00.000Z',
           endTime: '2023-01-01T11:03:00.000Z',
           cardsReviewed: 5,
@@ -217,7 +226,7 @@ describe('StatsScreen', () => {
         },
         {
           id: '3',
-          kanaType: 'hiragana',
+          kanaType: 'hiragana' as const,
           startTime: '2023-01-01T12:00:00.000Z',
           endTime: '2023-01-01T12:02:00.000Z',
           cardsReviewed: 3,
