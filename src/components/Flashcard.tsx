@@ -94,7 +94,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
       cardScale.value = withTiming(1, { duration: 400 });
       answerButtonsOpacity.value = withTiming(1, { duration: 500 });
       cardOpacity.value = withTiming(1, { duration: 600 });
-    }, 100);
+    }, 500);
   };
 
   const frontAnimatedStyle = useAnimatedStyle(() => {
@@ -139,7 +139,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
                 styles.card,
                 styles.cardFront,
                 frontAnimatedStyle,
-                isFlipped && { opacity: 0, pointerEvents: 'none' },
+                isFlipped && styles.hidden,
               ]}
             >
               {!isFlipped && (
