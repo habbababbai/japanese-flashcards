@@ -23,22 +23,16 @@ export const Flashcard: React.FC<FlashcardProps> = ({
   onAnswer,
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [showAnswerButtons, setShowAnswerButtons] = useState(false);
   const [userAnswer, setUserAnswer] = useState<boolean | null>(null);
   const flipAnimation = useSharedValue(0);
-  const answerButtonsOpacity = useSharedValue(1);
-  const cardScale = useSharedValue(1);
-  const cardOpacity = useSharedValue(1);
+  const cardAnimation = useSharedValue(1);
 
   // Reset state when kana changes
   useEffect(() => {
     setIsFlipped(false);
-    setShowAnswerButtons(false);
     setUserAnswer(null);
     flipAnimation.value = 0;
-    answerButtonsOpacity.value = 1;
-    cardScale.value = 1;
-    cardOpacity.value = 1;
+    cardAnimation.value = 1;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kana.id]);
 
@@ -49,13 +43,6 @@ export const Flashcard: React.FC<FlashcardProps> = ({
       stiffness: 100,
     });
     setIsFlipped(!isFlipped);
-
-    if (!isFlipped) {
-      setShowAnswerButtons(true);
-    } else {
-      setShowAnswerButtons(false);
-    }
-
     onFlip?.();
   }, [isFlipped, flipAnimation, onFlip]);
 
@@ -64,25 +51,12 @@ export const Flashcard: React.FC<FlashcardProps> = ({
       // Set user answer for color feedback
       setUserAnswer(isCorrect);
 
-      // Hide answer buttons immediately for better test compatibility
-      setShowAnswerButtons(false);
-
-      // Animate answer buttons fade out
-      answerButtonsOpacity.value = withTiming(0, {
-        duration: 500,
-      });
-
-      // Animate card scale down slightly
-      cardScale.value = withTiming(0.95, {
-        duration: 400,
-      });
-
       // Animate card fade out
-      cardOpacity.value = withTiming(0, {
+      cardAnimation.value = withTiming(0, {
         duration: 600,
       });
 
-      // Call onAnswer after a shorter delay to allow animations to complete
+      // Call onAnswer after animation completes
       setTimeout(() => {
         onAnswer?.(isCorrect);
         flipAnimation.value = withSpring(0, {
@@ -92,49 +66,39 @@ export const Flashcard: React.FC<FlashcardProps> = ({
         setIsFlipped(false);
 
         // Reset animations for next card
-        cardScale.value = withTiming(1, { duration: 400 });
-        answerButtonsOpacity.value = withTiming(1, { duration: 500 });
-        cardOpacity.value = withTiming(1, { duration: 600 });
-      }, 500);
+        cardAnimation.value = withTiming(1, { duration: 600 });
+      }, 600);
     },
-    [onAnswer, answerButtonsOpacity, cardScale, cardOpacity, flipAnimation]
+    [onAnswer, cardAnimation, flipAnimation]
   );
 
   const frontAnimatedStyle = useAnimatedStyle(() => {
-    const rotateY = interpolate(flipAnimation.value, [0, 1], [0, 180]);
+    const rotateY = interpolate(flipAnimation.value, [0, 1], [0, Math.PI]);
     return {
-      transform: [{ rotateY: `${rotateY}deg` }],
+      transform: [{ rotateY: `${rotateY}rad` }],
     };
   });
 
   const backAnimatedStyle = useAnimatedStyle(() => {
-    const rotateY = interpolate(flipAnimation.value, [0, 1], [180, 360]);
+    const rotateY = interpolate(
+      flipAnimation.value,
+      [0, 1],
+      [Math.PI, 2 * Math.PI]
+    );
     return {
-      transform: [{ rotateY: `${rotateY}deg` }],
+      transform: [{ rotateY: `${rotateY}rad` }],
     };
   });
 
   const cardAnimatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ scale: cardScale.value }],
-    };
-  });
-
-  const answerButtonsAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: answerButtonsOpacity.value,
-    };
-  });
-
-  const cardContainerAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: cardOpacity.value,
+      opacity: cardAnimation.value,
     };
   });
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[cardAnimatedStyle, cardContainerAnimatedStyle]}>
+      <Animated.View style={cardAnimatedStyle}>
         <TouchableOpacity onPress={handleFlip} activeOpacity={0.9}>
           <View style={styles.cardContainer}>
             <Animated.View
@@ -177,10 +141,8 @@ export const Flashcard: React.FC<FlashcardProps> = ({
           </View>
         </TouchableOpacity>
       </Animated.View>
-      {showAnswerButtons ? (
-        <Animated.View
-          style={[styles.answerButtons, answerButtonsAnimatedStyle]}
-        >
+      {isFlipped ? (
+        <Animated.View style={styles.answerButtons}>
           <TouchableOpacity
             style={[styles.answerButton, styles.incorrectButton]}
             onPress={() => handleAnswer(false)}
