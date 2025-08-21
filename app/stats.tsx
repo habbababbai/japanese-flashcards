@@ -78,7 +78,6 @@ export default function StatsScreen() {
           b.incorrectCount -
           (a.correctCount + a.incorrectCount)
       )
-      .slice(0, 10)
       .map(([kanaId, progress]) => {
         const total = progress.correctCount + progress.incorrectCount;
         const accuracy =
@@ -193,7 +192,8 @@ export default function StatsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Character Progress</Text>
           <Text style={styles.sectionSubtitle}>
-            Showing characters with study history
+            All characters with study history (
+            {Object.keys(kanaProgress).length} total)
           </Text>
           {Object.keys(kanaProgress).length === 0 ? (
             <Text style={styles.emptyText}>No character progress yet</Text>
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   listContainer: {
-    height: 300,
+    height: 400,
     marginTop: spacing.sm,
   },
   safeArea: {
