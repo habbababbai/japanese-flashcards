@@ -16,6 +16,7 @@ export interface StudySession {
   cardsReviewed: number;
   correctAnswers: number;
   incorrectAnswers: number;
+  studyOptions: StudyOptions;
 }
 
 export interface StudyProgress {
@@ -23,4 +24,9 @@ export interface StudyProgress {
   isCorrect: boolean;
   responseTime: number;
   timestamp: string; // ISO string for serialization
+}
+
+export interface StudyOptions {
+  isShuffled: boolean;
+  characterCount?: number; // Only used when isShuffled is true
 }

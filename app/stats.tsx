@@ -98,11 +98,10 @@ export default function StatsScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <View style={styles.header}>
+        <Text style={styles.titleText}>Study Statistics</Text>
+      </View>
       <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.titleText}>Study Statistics</Text>
-        </View>
-
         {/* Overall Stats */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Overall Progress</Text>
@@ -218,7 +217,7 @@ export default function StatsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.background.secondary,
+    backgroundColor: colors.background.primary,
     flex: 1,
   },
   emptyText: {
@@ -280,7 +279,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
   },
   safeArea: {
-    backgroundColor: colors.background.primary,
+    backgroundColor: colors.neutral.white,
     flex: 1,
   },
   section: {

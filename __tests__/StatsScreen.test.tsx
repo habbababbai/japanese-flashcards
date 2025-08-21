@@ -151,6 +151,7 @@ describe('StatsScreen', () => {
           cardsReviewed: 10,
           correctAnswers: 8,
           incorrectAnswers: 2,
+          studyOptions: { isShuffled: true },
         },
         {
           id: '2',
@@ -160,6 +161,7 @@ describe('StatsScreen', () => {
           cardsReviewed: 5,
           correctAnswers: 4,
           incorrectAnswers: 1,
+          studyOptions: { isShuffled: false },
         },
       ];
 
@@ -187,6 +189,7 @@ describe('StatsScreen', () => {
           cardsReviewed: 10,
           correctAnswers: 8,
           incorrectAnswers: 2,
+          studyOptions: { isShuffled: true },
         },
       ];
 
@@ -214,6 +217,7 @@ describe('StatsScreen', () => {
           cardsReviewed: 10,
           correctAnswers: 8,
           incorrectAnswers: 2,
+          studyOptions: { isShuffled: true },
         },
         {
           id: '2',
@@ -223,6 +227,7 @@ describe('StatsScreen', () => {
           cardsReviewed: 5,
           correctAnswers: 4,
           incorrectAnswers: 1,
+          studyOptions: { isShuffled: false },
         },
         {
           id: '3',
@@ -232,6 +237,7 @@ describe('StatsScreen', () => {
           cardsReviewed: 3,
           correctAnswers: 2,
           incorrectAnswers: 1,
+          studyOptions: { isShuffled: true, characterCount: 10 },
         },
       ];
 
