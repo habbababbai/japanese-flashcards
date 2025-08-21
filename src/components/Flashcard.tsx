@@ -237,8 +237,6 @@ const styles = StyleSheet.create({
   },
   correctButton: {
     backgroundColor: colors.success.main,
-    borderColor: colors.success.dark,
-    borderWidth: spacing.xs / 4,
   },
   hidden: {
     opacity: 0,
@@ -252,8 +250,6 @@ const styles = StyleSheet.create({
   },
   incorrectButton: {
     backgroundColor: colors.error.main,
-    borderColor: colors.error.dark,
-    borderWidth: spacing.xs / 4,
   },
   kanaText: {
     color: colors.text.inverse,

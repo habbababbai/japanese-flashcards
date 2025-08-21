@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useAppSelector } from '../src/hooks/useRedux';
 import { spacing, fontSize, hp } from '../src/utils/responsive';
@@ -83,7 +83,7 @@ export default function StatsScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.titleText}>Study Statistics</Text>
@@ -92,12 +92,12 @@ export default function StatsScreen() {
             <Text style={styles.emptyText}>Loading...</Text>
           </View>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <View style={styles.header}>
         <Text style={styles.titleText}>Study Statistics</Text>
       </View>
@@ -211,7 +211,7 @@ export default function StatsScreen() {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -284,6 +284,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // Prevent layout shift by ensuring consistent positioning
     minHeight: '100%',
+    paddingTop: hp(6), // Fixed top padding to prevent shift
   },
   section: {
     backgroundColor: colors.background.primary,

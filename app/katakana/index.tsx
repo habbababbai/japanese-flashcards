@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import { fontSize, spacing } from '../../src/utils/responsive';
+import { fontSize, spacing, hp } from '../../src/utils/responsive';
 import { colors } from '../../src/utils/colors';
 import { StudyOptions } from '../../src/types';
 
@@ -34,7 +28,7 @@ export default function KatakanaSettingsScreen() {
   const characterCountOptions = [10, 20, 30, 'All'];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.titleText}>Katakana Study</Text>
@@ -154,7 +148,7 @@ export default function KatakanaSettingsScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -224,10 +218,10 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   safeArea: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.neutral.white,
     flex: 1,
-    // Prevent layout shift by ensuring consistent positioning
     minHeight: '100%',
+    paddingTop: hp(6), // Fixed top padding to prevent shift
   },
   sectionTitle: {
     fontSize: fontSize.lg,
