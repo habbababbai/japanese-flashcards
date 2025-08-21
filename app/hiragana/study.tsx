@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Alert,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Flashcard } from '../../src/components/Flashcard';
 import { Kana, StudyProgress, StudyOptions } from '../../src/types';
@@ -19,12 +12,10 @@ import {
   addProgress,
 } from '../../src/store/slices/studySessionSlice';
 import { hiraganaData } from '../../src/data/hiragana';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HiraganaStudyScreen() {
   const dispatch = useAppDispatch();
   const params = useLocalSearchParams();
-  const insets = useSafeAreaInsets();
 
   const [shuffledKanaList, setShuffledKanaList] = useState<Kana[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -172,56 +163,39 @@ export default function HiraganaStudyScreen() {
 
   if (!currentKana) {
     return (
-      <View style={styles.outerContainer}>
-        <SafeAreaView style={styles.topSafeArea} />
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <Text style={styles.titleText}>Hiragana</Text>
-            <Text style={styles.progressText}>Loading...</Text>
-          </View>
-        </View>
-        <SafeAreaView style={styles.bottomSafeArea} />
+      <View style={styles.container}>
+        <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.outerContainer}>
-      <SafeAreaView style={styles.topSafeArea} />
-      <View style={styles.header}>
-        <View style={[styles.headerContent, { paddingTop: insets.top }]}>
-          <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>✕</Text>
-          </TouchableOpacity>
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Hiragana</Text>
-            <Text style={styles.progressText}>
-              {currentIndex + 1} / {shuffledKanaList.length}
-            </Text>
-          </View>
-          <View style={styles.spacer} />
-        </View>
-      </View>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+        <Text style={styles.closeButtonText}>✕</Text>
+      </TouchableOpacity>
 
       <View style={styles.content}>
         <Flashcard kana={currentKana} onAnswer={handleAnswer} />
       </View>
-
-      <SafeAreaView style={styles.bottomSafeArea} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  bottomSafeArea: {
-    backgroundColor: colors.background.secondary,
-    flex: 0,
+  container: {
+    backgroundColor: colors.neutral.white,
+    flex: 1,
   },
   closeButton: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
     alignItems: 'center',
     height: 32,
     justifyContent: 'center',
     width: 32,
+    zIndex: 1,
   },
   closeButtonText: {
     color: colors.text.secondary,
@@ -229,45 +203,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   content: {
-    backgroundColor: colors.background.secondary,
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: spacing.lg,
   },
-  header: {
-    alignItems: 'center',
-    borderBottomColor: colors.border.light,
-    borderBottomWidth: 1,
-    paddingBottom: spacing.md,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xl,
-  },
-  headerContent: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  spacer: {
-    width: 32,
-  },
-  titleContainer: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  outerContainer: {
-    backgroundColor: colors.background.secondary,
-    flex: 1,
-  },
-  progressText: {
+  loadingText: {
     color: colors.text.secondary,
-    fontSize: fontSize.md,
-  },
-  titleText: {
     fontSize: fontSize.lg,
-    fontWeight: 'bold',
-  },
-  topSafeArea: {
-    backgroundColor: colors.neutral.white,
-    flex: 0,
+    textAlign: 'center',
+    marginTop: 100,
   },
 });
