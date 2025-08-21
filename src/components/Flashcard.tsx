@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   interpolate,
   withTiming,
-  runOnJS,
 } from 'react-native-reanimated';
 import { Kana } from '../types';
 import { spacing, fontSize, hp, wp } from '../utils/responsive';
@@ -22,8 +15,6 @@ interface FlashcardProps {
   onFlip?: () => void;
   onAnswer?: (isCorrect: boolean) => void;
 }
-
-const { width } = Dimensions.get('window');
 
 export const Flashcard: React.FC<FlashcardProps> = ({
   kana,
@@ -169,7 +160,9 @@ export const Flashcard: React.FC<FlashcardProps> = ({
             style={[styles.answerButton, styles.incorrectButton]}
             onPress={() => handleAnswer(false)}
           >
-            <Text style={styles.answerButtonText}>❌ I didn't know it</Text>
+            <Text style={styles.answerButtonText}>
+              ❌ I didn&apos;t know it
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.answerButton, styles.correctButton]}

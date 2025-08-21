@@ -25,7 +25,6 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
   const [shuffledKanaList, setShuffledKanaList] = useState<Kana[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState<StudyProgress[]>([]);
-  const [showAnswer, setShowAnswer] = useState(false);
 
   // Initialize with shuffled or ordered list
   useEffect(() => {
@@ -35,7 +34,6 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
       setShuffledKanaList([...kanaList]);
       setCurrentIndex(0);
       setProgress([]);
-      setShowAnswer(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kanaList, isShuffled]);
@@ -45,7 +43,6 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
     setShuffledKanaList(shuffled);
     setCurrentIndex(0);
     setProgress([]);
-    setShowAnswer(false);
   };
 
   const currentKana = shuffledKanaList[currentIndex];
@@ -65,10 +62,6 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
       </SafeAreaView>
     );
   }
-
-  const handleCardFlip = () => {
-    setShowAnswer(true);
-  };
 
   const handleAnswer = (isCorrect: boolean) => {
     const newProgress: StudyProgress = {
@@ -112,7 +105,6 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
       );
     } else {
       setCurrentIndex(currentIndex + 1);
-      setShowAnswer(false);
     }
   };
 
@@ -129,11 +121,7 @@ export const StudyScreen: React.FC<StudyScreenProps> = ({
         </View>
 
         <View style={styles.cardContainer}>
-          <Flashcard
-            kana={currentKana}
-            onFlip={handleCardFlip}
-            onAnswer={handleAnswer}
-          />
+          <Flashcard kana={currentKana} onAnswer={handleAnswer} />
         </View>
       </View>
     </SafeAreaView>
