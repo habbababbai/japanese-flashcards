@@ -1,173 +1,171 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-    View,
-    Text,
-    TouchableOpacity,
-    StyleSheet,
-    SafeAreaView,
-} from "react-native";
-import { wp, hp, fontSize, spacing } from "../utils/responsive";
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+} from 'react-native';
+import { fontSize, spacing } from '../utils/responsive';
 
 interface StudySettings {
-    isShuffled: boolean;
+  isShuffled: boolean;
 }
 
 interface SettingsScreenProps {
-    onStartStudy: (settings: StudySettings) => void;
-    title: string;
+  onStartStudy: (settings: StudySettings) => void;
+  title: string;
 }
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({
-    onStartStudy,
-    title,
+  onStartStudy,
+  title,
 }) => {
-    const [isShuffled, setIsShuffled] = useState(false);
+  const [isShuffled, setIsShuffled] = useState(false);
 
-    const handleStartStudy = () => {
-        onStartStudy({ isShuffled });
-    };
+  const handleStartStudy = () => {
+    onStartStudy({ isShuffled });
+  };
 
-    return (
-        <SafeAreaView style={styles.safeArea}>
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.titleText}>{title} Study</Text>
-                </View>
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.titleText}>{title} Study</Text>
+        </View>
 
-                <View style={styles.content}>
-                    <Text style={styles.sectionTitle}>Study Mode</Text>
+        <View style={styles.content}>
+          <Text style={styles.sectionTitle}>Study Mode</Text>
 
-                    <View style={styles.optionsContainer}>
-                        <TouchableOpacity
-                            style={[
-                                styles.optionButton,
-                                !isShuffled && styles.optionButtonActive,
-                            ]}
-                            onPress={() => setIsShuffled(false)}
-                        >
-                            <Text
-                                style={[
-                                    styles.optionText,
-                                    !isShuffled && styles.optionTextActive,
-                                ]}
-                            >
-                                In Order
-                            </Text>
-                            <Text style={styles.optionDescription}>
-                                Study characters in their traditional order
-                            </Text>
-                        </TouchableOpacity>
+          <View style={styles.optionsContainer}>
+            <TouchableOpacity
+              style={[
+                styles.optionButton,
+                !isShuffled && styles.optionButtonActive,
+              ]}
+              onPress={() => setIsShuffled(false)}
+            >
+              <Text
+                style={[
+                  styles.optionText,
+                  !isShuffled && styles.optionTextActive,
+                ]}
+              >
+                In Order
+              </Text>
+              <Text style={styles.optionDescription}>
+                Study characters in their traditional order
+              </Text>
+            </TouchableOpacity>
 
-                        <TouchableOpacity
-                            style={[
-                                styles.optionButton,
-                                isShuffled && styles.optionButtonActive,
-                            ]}
-                            onPress={() => setIsShuffled(true)}
-                        >
-                            <Text
-                                style={[
-                                    styles.optionText,
-                                    isShuffled && styles.optionTextActive,
-                                ]}
-                            >
-                                Shuffled
-                            </Text>
-                            <Text style={styles.optionDescription}>
-                                Study characters in random order
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+            <TouchableOpacity
+              style={[
+                styles.optionButton,
+                isShuffled && styles.optionButtonActive,
+              ]}
+              onPress={() => setIsShuffled(true)}
+            >
+              <Text
+                style={[
+                  styles.optionText,
+                  isShuffled && styles.optionTextActive,
+                ]}
+              >
+                Shuffled
+              </Text>
+              <Text style={styles.optionDescription}>
+                Study characters in random order
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-                    <TouchableOpacity
-                        style={styles.startButton}
-                        onPress={handleStartStudy}
-                    >
-                        <Text style={styles.startButtonText}>
-                            Start Studying
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </SafeAreaView>
-    );
+          <TouchableOpacity
+            style={styles.startButton}
+            onPress={handleStartStudy}
+          >
+            <Text style={styles.startButtonText}>Start Studying</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
-    safeArea: {
-        backgroundColor: "white",
-        flex: 1,
-    },
-    container: {
-        flex: 1,
-        backgroundColor: "white",
-    },
-    header: {
-        paddingHorizontal: spacing.lg,
-        paddingTop: spacing.lg,
-        paddingBottom: spacing.md,
-        borderBottomWidth: 1,
-        borderBottomColor: "#e0e0e0",
-    },
-    titleText: {
-        fontSize: fontSize.xl,
-        fontWeight: "bold",
-        color: "#333",
-        textAlign: "center",
-    },
-    content: {
-        flex: 1,
-        padding: spacing.lg,
-        justifyContent: "center",
-    },
-    sectionTitle: {
-        fontSize: fontSize.lg,
-        fontWeight: "600",
-        color: "#333",
-        marginBottom: spacing.lg,
-        textAlign: "center",
-    },
-    optionsContainer: {
-        marginBottom: spacing.xl,
-    },
-    optionButton: {
-        backgroundColor: "#f8f9fa",
-        borderWidth: 2,
-        borderColor: "#e0e0e0",
-        borderRadius: 12,
-        padding: spacing.lg,
-        marginBottom: spacing.md,
-        alignItems: "center",
-    },
-    optionButtonActive: {
-        borderColor: "#4A90E2",
-        backgroundColor: "#e3f2fd",
-    },
-    optionText: {
-        fontSize: fontSize.md,
-        fontWeight: "600",
-        color: "#666",
-        marginBottom: spacing.xs,
-    },
-    optionTextActive: {
-        color: "#4A90E2",
-    },
-    optionDescription: {
-        fontSize: fontSize.sm,
-        color: "#999",
-        textAlign: "center",
-    },
-    startButton: {
-        backgroundColor: "#4A90E2",
-        borderRadius: 12,
-        paddingVertical: spacing.lg,
-        paddingHorizontal: spacing.xl,
-        alignItems: "center",
-        marginTop: spacing.lg,
-    },
-    startButtonText: {
-        color: "white",
-        fontSize: fontSize.md,
-        fontWeight: "600",
-    },
+  container: {
+    backgroundColor: 'white',
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: spacing.lg,
+  },
+  header: {
+    borderBottomColor: '#e0e0e0',
+    borderBottomWidth: 1,
+    paddingBottom: spacing.md,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+  },
+  optionButton: {
+    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
+    borderColor: '#e0e0e0',
+    borderRadius: 12,
+    borderWidth: 2,
+    marginBottom: spacing.md,
+    padding: spacing.lg,
+  },
+  optionButtonActive: {
+    backgroundColor: '#e3f2fd',
+    borderColor: '#4A90E2',
+  },
+  optionDescription: {
+    color: '#999',
+    fontSize: fontSize.sm,
+    textAlign: 'center',
+  },
+  optionText: {
+    color: '#666',
+    fontSize: fontSize.md,
+    fontWeight: '600',
+    marginBottom: spacing.xs,
+  },
+  optionTextActive: {
+    color: '#4A90E2',
+  },
+  optionsContainer: {
+    marginBottom: spacing.xl,
+  },
+  safeArea: {
+    backgroundColor: 'white',
+    flex: 1,
+  },
+  sectionTitle: {
+    color: '#333',
+    fontSize: fontSize.lg,
+    fontWeight: '600',
+    marginBottom: spacing.lg,
+    textAlign: 'center',
+  },
+  startButton: {
+    alignItems: 'center',
+    backgroundColor: '#4A90E2',
+    borderRadius: 12,
+    marginTop: spacing.lg,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.lg,
+  },
+  startButtonText: {
+    color: 'white',
+    fontSize: fontSize.md,
+    fontWeight: '600',
+  },
+  titleText: {
+    color: '#333',
+    fontSize: fontSize.xl,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
