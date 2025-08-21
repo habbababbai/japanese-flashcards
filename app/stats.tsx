@@ -1,41 +1,21 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
-import { useStorage } from '../src/hooks/useStorage';
+import { useAppSelector } from '../src/hooks/useRedux';
 import { spacing, fontSize } from '../src/utils/responsive';
 import { colors } from '../src/utils/colors';
 import { hiraganaData } from '../src/data/hiragana';
 import { katakanaData } from '../src/data/katakana';
-import { useFocusEffect } from 'expo-router';
 
 export default function StatsScreen() {
-  const { sessions, kanaProgress, isLoading, loadData } = useStorage();
+  const sessions = useAppSelector(state => state.studySession.sessions);
+  const kanaProgress = useAppSelector(state => state.studySession.kanaProgress);
+  const isLoading = useAppSelector(state => state.studySession.isLoading);
 
-  // Refresh data when screen comes into focus
-  useFocusEffect(
-    React.useCallback(() => {
-      loadData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-  );
-
-  // Function to get kana character and romaji from ID
-  const getKanaInfo = (kanaId: string) => {
-    // Check hiragana first
-    const hiragana = hiraganaData.find(k => k.id === kanaId);
-    if (hiragana) {
-      return { character: hiragana.character, romaji: hiragana.romaji };
-    }
-
-    // Check katakana
-    const katakana = katakanaData.find(k => k.id === kanaId);
-    if (katakana) {
-      return { character: katakana.character, romaji: katakana.romaji };
-    }
-
-    // Fallback to ID if not found
-    return { character: kanaId, romaji: '' };
-  };
+  // Load data on mount
+  useEffect(() => {
+    // Data will be loaded automatically by the store
+  }, []);
 
   const totalStudyTime = sessions.reduce((total, session) => {
     if (session.endTime) {
@@ -71,28 +51,34 @@ export default function StatsScreen() {
   const recentSessions = sessions.slice(-5).reverse();
 
   const kanaProgressData = useMemo(() => {
-    return Object.entries(kanaProgress)
-      .sort(
-        ([, a], [, b]) =>
-          b.correctCount +
-          b.incorrectCount -
-          (a.correctCount + a.incorrectCount)
-      )
-      .map(([kanaId, progress]) => {
-        const total = progress.correctCount + progress.incorrectCount;
-        const accuracy =
-          total > 0 ? Math.round((progress.correctCount / total) * 100) : 0;
+    // Combine all kana data (hiragana + katakana)
+    const allKana = [...hiraganaData, ...katakanaData];
 
-        const kanaInfo = getKanaInfo(kanaId);
-        return {
-          kanaId,
-          character: kanaInfo.character,
-          romaji: kanaInfo.romaji,
-          progress,
-          total,
-          accuracy,
-        };
-      });
+    // Create progress data for all characters, including those with zero progress
+    const allProgressData = allKana.map(kana => {
+      const progress = kanaProgress[kana.id] || {
+        correctCount: 0,
+        incorrectCount: 0,
+      };
+      const total = progress.correctCount + progress.incorrectCount;
+      const accuracy =
+        total > 0 ? Math.round((progress.correctCount / total) * 100) : 0;
+
+      return {
+        kanaId: kana.id,
+        character: kana.character,
+        romaji: kana.romaji,
+        type: kana.type,
+        progress,
+        total,
+        accuracy,
+      };
+    });
+
+    // Filter out characters with no practice, then sort by frequency only
+    return allProgressData
+      .filter(item => item.total > 0) // Only show practiced characters
+      .sort((a, b) => b.total - a.total); // Sort by frequency (most studied first)
   }, [kanaProgress]);
 
   if (isLoading) {
@@ -192,11 +178,11 @@ export default function StatsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Character Progress</Text>
           <Text style={styles.sectionSubtitle}>
-            All characters with study history (
-            {Object.keys(kanaProgress).length} total)
+            Practiced characters ({kanaProgressData.length} total) - Sorted by
+            study frequency
           </Text>
-          {Object.keys(kanaProgress).length === 0 ? (
-            <Text style={styles.emptyText}>No character progress yet</Text>
+          {kanaProgressData.length === 0 ? (
+            <Text style={styles.emptyText}>No characters available</Text>
           ) : (
             <View style={styles.listContainer}>
               <FlashList
@@ -207,6 +193,7 @@ export default function StatsScreen() {
                     <View style={styles.kanaInfo}>
                       <Text style={styles.kanaCharacter}>{item.character}</Text>
                       <Text style={styles.kanaRomaji}>{item.romaji}</Text>
+                      <Text style={styles.kanaType}>{item.type}</Text>
                     </View>
                     <View style={styles.kanaProgressStats}>
                       <Text style={styles.kanaProgressText}>
@@ -218,7 +205,7 @@ export default function StatsScreen() {
                   </View>
                 )}
                 getItemType={_item => 'default'}
-                keyExtractor={item => item.kanaId}
+                keyExtractor={item => `${item.type}-${item.kanaId}`}
                 showsVerticalScrollIndicator={false}
               />
             </View>
@@ -282,6 +269,11 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     fontSize: fontSize.sm,
     marginTop: spacing.xs,
+  },
+  kanaType: {
+    color: colors.text.tertiary,
+    fontSize: fontSize.xs,
+    textTransform: 'capitalize',
   },
   listContainer: {
     height: 400,

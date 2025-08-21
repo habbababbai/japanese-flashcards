@@ -1,32 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { Flashcard } from '../../src/components/Flashcard';
 import { Kana, StudyProgress } from '../../src/types';
 import { spacing, fontSize } from '../../src/utils/responsive';
 import { colors } from '../../src/utils/colors';
-import { useStorage } from '../../src/hooks/useStorage';
+import { useAppDispatch } from '../../src/hooks/useRedux';
+import {
+  startSession,
+  endSession,
+  addProgress,
+} from '../../src/store/slices/studySessionSlice';
 import { hiraganaData } from '../../src/data/hiragana';
 
 export default function HiraganaStudyScreen() {
-  const { saveSession, saveProgress } = useStorage();
+  const dispatch = useAppDispatch();
 
   const [shuffledKanaList, setShuffledKanaList] = useState<Kana[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState<StudyProgress[]>([]);
-  const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
 
-  // Initialize with shuffled list
+  // Initialize with shuffled list and start session
   useEffect(() => {
     const shuffled = [...hiraganaData].sort(() => Math.random() - 0.5);
     setShuffledKanaList(shuffled);
     setCurrentIndex(0);
     setProgress([]);
-    setSessionStartTime(new Date()); // Set start time when study begins
-  }, []);
+
+    // Start Redux session
+    dispatch(
+      startSession({
+        kanaType: 'hiragana',
+        isShuffled: true,
+      })
+    );
+  }, [dispatch]);
 
   const currentKana = shuffledKanaList[currentIndex];
   const isLastCard = currentIndex === shuffledKanaList.length - 1;
+
+  const handleAnswer = useCallback(
+    (isCorrect: boolean) => {
+      const newProgress: StudyProgress = {
+        kanaId: currentKana.id,
+        isCorrect,
+        responseTime: Date.now(),
+        timestamp: new Date().toISOString(),
+      };
+
+      // Dispatch progress to Redux
+      dispatch(addProgress(newProgress));
+      setProgress(prev => [...prev, newProgress]);
+
+      if (isLastCard) {
+        // Study session complete
+        const finalProgress = [...progress, newProgress];
+
+        // End session in Redux
+        dispatch(
+          endSession({
+            endTime: new Date().toISOString(),
+            progress: finalProgress,
+          })
+        );
+
+        const correctCount = finalProgress.filter(p => p.isCorrect).length;
+        const totalCount = finalProgress.length;
+
+        Alert.alert(
+          'Hiragana Study Complete! 🎉',
+          `You got ${correctCount} out of ${totalCount} correct!`,
+          [
+            {
+              text: 'OK',
+              onPress: () => router.back(),
+            },
+          ]
+        );
+      } else {
+        setCurrentIndex(prev => prev + 1);
+      }
+    },
+    [currentKana, isLastCard, progress, dispatch]
+  );
 
   if (!currentKana) {
     return (
@@ -42,52 +98,6 @@ export default function HiraganaStudyScreen() {
       </SafeAreaView>
     );
   }
-
-  const handleAnswer = (isCorrect: boolean) => {
-    const newProgress: StudyProgress = {
-      kanaId: currentKana.id,
-      isCorrect,
-      responseTime: Date.now(),
-      timestamp: new Date(),
-    };
-
-    // Save progress to storage
-    saveProgress(newProgress);
-    setProgress([...progress, newProgress]);
-
-    if (isLastCard) {
-      // Study session complete
-      const finalProgress = [...progress, newProgress];
-
-      // Save session to storage
-      const session = {
-        id: Date.now().toString(),
-        kanaType: 'hiragana' as const,
-        startTime: sessionStartTime || new Date(),
-        endTime: new Date(),
-        cardsReviewed: finalProgress.length,
-        correctAnswers: finalProgress.filter(p => p.isCorrect).length,
-        incorrectAnswers: finalProgress.filter(p => !p.isCorrect).length,
-      };
-      saveSession(session);
-
-      const correctCount = finalProgress.filter(p => p.isCorrect).length;
-      const totalCount = finalProgress.length;
-
-      Alert.alert(
-        'Hiragana Study Complete! 🎉',
-        `You got ${correctCount} out of ${totalCount} correct!`,
-        [
-          {
-            text: 'OK',
-            onPress: () => router.back(),
-          },
-        ]
-      );
-    } else {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -136,7 +146,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize.md,
   },
   safeArea: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.neutral.white,
     flex: 1,
   },
   titleText: {

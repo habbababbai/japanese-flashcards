@@ -247,13 +247,13 @@ describe('Katakana Data', () => {
   describe('Data Consistency', () => {
     it('should have consistent ID format', () => {
       katakanaData.forEach(kana => {
-        expect(kana.id).toMatch(/^\d+$/);
+        expect(kana.id).toMatch(/^k\d+$/);
       });
     });
 
     it('should have sequential IDs', () => {
       const ids = katakanaData
-        .map(kana => parseInt(kana.id))
+        .map(kana => parseInt(kana.id.replace('k', '')))
         .sort((a, b) => a - b);
       for (let i = 1; i < ids.length; i++) {
         expect(ids[i]).toBe(ids[i - 1] + 1);

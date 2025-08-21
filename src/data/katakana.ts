@@ -3,7 +3,7 @@ import { Kana } from '../types';
 export const katakanaData: Kana[] = [
   // Basic vowels
   {
-    id: '1',
+    id: 'k1',
     character: 'ア',
     romaji: 'a',
     type: 'katakana',
@@ -11,7 +11,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '2',
+    id: 'k2',
     character: 'イ',
     romaji: 'i',
     type: 'katakana',
@@ -19,7 +19,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '3',
+    id: 'k3',
     character: 'ウ',
     romaji: 'u',
     type: 'katakana',
@@ -27,7 +27,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '4',
+    id: 'k4',
     character: 'エ',
     romaji: 'e',
     type: 'katakana',
@@ -35,7 +35,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '5',
+    id: 'k5',
     character: 'オ',
     romaji: 'o',
     type: 'katakana',
@@ -44,7 +44,7 @@ export const katakanaData: Kana[] = [
   },
   // K series
   {
-    id: '6',
+    id: 'k6',
     character: 'カ',
     romaji: 'ka',
     type: 'katakana',
@@ -52,7 +52,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '7',
+    id: 'k7',
     character: 'キ',
     romaji: 'ki',
     type: 'katakana',
@@ -60,7 +60,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '8',
+    id: 'k8',
     character: 'ク',
     romaji: 'ku',
     type: 'katakana',
@@ -68,7 +68,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '9',
+    id: 'k9',
     character: 'ケ',
     romaji: 'ke',
     type: 'katakana',
@@ -76,7 +76,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '10',
+    id: 'k10',
     character: 'コ',
     romaji: 'ko',
     type: 'katakana',
@@ -85,7 +85,7 @@ export const katakanaData: Kana[] = [
   },
   // S series
   {
-    id: '11',
+    id: 'k11',
     character: 'サ',
     romaji: 'sa',
     type: 'katakana',
@@ -93,7 +93,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '12',
+    id: 'k12',
     character: 'シ',
     romaji: 'shi',
     type: 'katakana',
@@ -101,7 +101,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '13',
+    id: 'k13',
     character: 'ス',
     romaji: 'su',
     type: 'katakana',
@@ -109,7 +109,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '14',
+    id: 'k14',
     character: 'セ',
     romaji: 'se',
     type: 'katakana',
@@ -117,7 +117,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '15',
+    id: 'k15',
     character: 'ソ',
     romaji: 'so',
     type: 'katakana',
@@ -126,7 +126,7 @@ export const katakanaData: Kana[] = [
   },
   // T series
   {
-    id: '16',
+    id: 'k16',
     character: 'タ',
     romaji: 'ta',
     type: 'katakana',
@@ -134,7 +134,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '17',
+    id: 'k17',
     character: 'チ',
     romaji: 'chi',
     type: 'katakana',
@@ -142,7 +142,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '18',
+    id: 'k18',
     character: 'ツ',
     romaji: 'tsu',
     type: 'katakana',
@@ -150,7 +150,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '19',
+    id: 'k19',
     character: 'テ',
     romaji: 'te',
     type: 'katakana',
@@ -158,7 +158,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '20',
+    id: 'k20',
     character: 'ト',
     romaji: 'to',
     type: 'katakana',
@@ -167,7 +167,7 @@ export const katakanaData: Kana[] = [
   },
   // N series
   {
-    id: '21',
+    id: 'k21',
     character: 'ナ',
     romaji: 'na',
     type: 'katakana',
@@ -175,7 +175,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '22',
+    id: 'k22',
     character: 'ニ',
     romaji: 'ni',
     type: 'katakana',
@@ -183,7 +183,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '23',
+    id: 'k23',
     character: 'ヌ',
     romaji: 'nu',
     type: 'katakana',
@@ -191,7 +191,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '24',
+    id: 'k24',
     character: 'ネ',
     romaji: 'ne',
     type: 'katakana',
@@ -199,7 +199,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '25',
+    id: 'k25',
     character: 'ノ',
     romaji: 'no',
     type: 'katakana',
@@ -208,7 +208,7 @@ export const katakanaData: Kana[] = [
   },
   // H series
   {
-    id: '26',
+    id: 'k26',
     character: 'ハ',
     romaji: 'ha',
     type: 'katakana',
@@ -216,7 +216,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '27',
+    id: 'k27',
     character: 'ヒ',
     romaji: 'hi',
     type: 'katakana',
@@ -224,7 +224,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '28',
+    id: 'k28',
     character: 'フ',
     romaji: 'fu',
     type: 'katakana',
@@ -232,7 +232,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '29',
+    id: 'k29',
     character: 'ヘ',
     romaji: 'he',
     type: 'katakana',
@@ -240,7 +240,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '30',
+    id: 'k30',
     character: 'ホ',
     romaji: 'ho',
     type: 'katakana',
@@ -249,7 +249,7 @@ export const katakanaData: Kana[] = [
   },
   // M series
   {
-    id: '31',
+    id: 'k31',
     character: 'マ',
     romaji: 'ma',
     type: 'katakana',
@@ -257,7 +257,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '32',
+    id: 'k32',
     character: 'ミ',
     romaji: 'mi',
     type: 'katakana',
@@ -265,7 +265,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '33',
+    id: 'k33',
     character: 'ム',
     romaji: 'mu',
     type: 'katakana',
@@ -273,7 +273,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '34',
+    id: 'k34',
     character: 'メ',
     romaji: 'me',
     type: 'katakana',
@@ -281,7 +281,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '35',
+    id: 'k35',
     character: 'モ',
     romaji: 'mo',
     type: 'katakana',
@@ -290,7 +290,7 @@ export const katakanaData: Kana[] = [
   },
   // Y series
   {
-    id: '36',
+    id: 'k36',
     character: 'ヤ',
     romaji: 'ya',
     type: 'katakana',
@@ -298,7 +298,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '37',
+    id: 'k37',
     character: 'ユ',
     romaji: 'yu',
     type: 'katakana',
@@ -306,7 +306,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '38',
+    id: 'k38',
     character: 'ヨ',
     romaji: 'yo',
     type: 'katakana',
@@ -315,7 +315,7 @@ export const katakanaData: Kana[] = [
   },
   // R series
   {
-    id: '39',
+    id: 'k39',
     character: 'ラ',
     romaji: 'ra',
     type: 'katakana',
@@ -323,7 +323,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '40',
+    id: 'k40',
     character: 'リ',
     romaji: 'ri',
     type: 'katakana',
@@ -331,7 +331,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '41',
+    id: 'k41',
     character: 'ル',
     romaji: 'ru',
     type: 'katakana',
@@ -339,7 +339,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '42',
+    id: 'k42',
     character: 'レ',
     romaji: 're',
     type: 'katakana',
@@ -347,7 +347,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '43',
+    id: 'k43',
     character: 'ロ',
     romaji: 'ro',
     type: 'katakana',
@@ -356,7 +356,7 @@ export const katakanaData: Kana[] = [
   },
   // W series
   {
-    id: '44',
+    id: 'k44',
     character: 'ワ',
     romaji: 'wa',
     type: 'katakana',
@@ -364,7 +364,7 @@ export const katakanaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '45',
+    id: 'k45',
     character: 'ヲ',
     romaji: 'wo',
     type: 'katakana',
@@ -373,7 +373,7 @@ export const katakanaData: Kana[] = [
   },
   // N
   {
-    id: '46',
+    id: 'k46',
     character: 'ン',
     romaji: 'n',
     type: 'katakana',
