@@ -7,11 +7,17 @@ interface StudySessionState {
   currentSession: StudySession | null;
   kanaProgress: Record<
     string,
-    { correctCount: number; incorrectCount: number; lastReviewed?: Date }
+    { correctCount: number; incorrectCount: number; lastReviewed?: string }
   >;
   isLoading: boolean;
   error: string | null;
 }
+
+// Helper function to check if old IDs exist and clear store if needed
+const shouldClearStore = (kanaProgress: Record<string, any>) => {
+  // Check if any old numeric IDs exist (1, 2, 3, etc.)
+  return Object.keys(kanaProgress).some(key => /^\d+$/.test(key));
+};
 
 // Async thunks for storage operations
 export const loadStoredData = createAsyncThunk(
@@ -21,6 +27,17 @@ export const loadStoredData = createAsyncThunk(
       storageUtils.get('studySessions', []),
       storageUtils.get('kanaProgress', {}),
     ]);
+
+    // If old IDs are detected, clear the store completely
+    if (shouldClearStore(kanaProgress)) {
+      console.log('🔄 Old ID format detected, clearing store for fresh start');
+      await Promise.all([
+        storageUtils.set('studySessions', []),
+        storageUtils.set('kanaProgress', {}),
+      ]);
+      return { sessions: [], kanaProgress: {} };
+    }
+
     return { sessions, kanaProgress };
   }
 );
@@ -41,7 +58,7 @@ export const saveKanaProgress = createAsyncThunk(
       {
         correctCount: number;
         incorrectCount: number;
-        lastReviewed?: Date;
+        lastReviewed?: string;
       }
     >
   ) => {
@@ -72,7 +89,7 @@ const studySessionSlice = createSlice({
       const newSession: StudySession = {
         id: Date.now().toString(),
         kanaType: action.payload.kanaType,
-        startTime: new Date(),
+        startTime: new Date().toISOString(),
         cardsReviewed: 0,
         correctAnswers: 0,
         incorrectAnswers: 0,
@@ -91,7 +108,7 @@ const studySessionSlice = createSlice({
 
         const completedSession: StudySession = {
           ...state.currentSession,
-          endTime,
+          endTime: endTime.toISOString(),
           cardsReviewed: progress.length,
           correctAnswers: correctCount,
           incorrectAnswers: incorrectCount,

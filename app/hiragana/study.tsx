@@ -5,25 +5,36 @@ import { Flashcard } from '../../src/components/Flashcard';
 import { Kana, StudyProgress } from '../../src/types';
 import { spacing, fontSize } from '../../src/utils/responsive';
 import { colors } from '../../src/utils/colors';
-import { useStorage } from '../../src/hooks/useStorage';
+import { useAppDispatch } from '../../src/hooks/useRedux';
+import {
+  startSession,
+  endSession,
+  addProgress,
+} from '../../src/store/slices/studySessionSlice';
 import { hiraganaData } from '../../src/data/hiragana';
 
 export default function HiraganaStudyScreen() {
-  const { saveSession, saveProgress } = useStorage();
+  const dispatch = useAppDispatch();
 
   const [shuffledKanaList, setShuffledKanaList] = useState<Kana[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState<StudyProgress[]>([]);
-  const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
 
-  // Initialize with shuffled list
+  // Initialize with shuffled list and start session
   useEffect(() => {
     const shuffled = [...hiraganaData].sort(() => Math.random() - 0.5);
     setShuffledKanaList(shuffled);
     setCurrentIndex(0);
     setProgress([]);
-    setSessionStartTime(new Date()); // Set start time when study begins
-  }, []);
+
+    // Start Redux session
+    dispatch(
+      startSession({
+        kanaType: 'hiragana',
+        isShuffled: true,
+      })
+    );
+  }, [dispatch]);
 
   const currentKana = shuffledKanaList[currentIndex];
   const isLastCard = currentIndex === shuffledKanaList.length - 1;
@@ -48,28 +59,24 @@ export default function HiraganaStudyScreen() {
       kanaId: currentKana.id,
       isCorrect,
       responseTime: Date.now(),
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     };
 
-    // Save progress to storage
-    saveProgress(newProgress);
+    // Dispatch progress to Redux
+    dispatch(addProgress(newProgress));
     setProgress([...progress, newProgress]);
 
     if (isLastCard) {
       // Study session complete
       const finalProgress = [...progress, newProgress];
 
-      // Save session to storage
-      const session = {
-        id: Date.now().toString(),
-        kanaType: 'hiragana' as const,
-        startTime: sessionStartTime || new Date(),
-        endTime: new Date(),
-        cardsReviewed: finalProgress.length,
-        correctAnswers: finalProgress.filter(p => p.isCorrect).length,
-        incorrectAnswers: finalProgress.filter(p => !p.isCorrect).length,
-      };
-      saveSession(session);
+      // End session in Redux
+      dispatch(
+        endSession({
+          endTime: new Date(),
+          progress: finalProgress,
+        })
+      );
 
       const correctCount = finalProgress.filter(p => p.isCorrect).length;
       const totalCount = finalProgress.length;

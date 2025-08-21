@@ -3,7 +3,7 @@ import { Kana } from '../types';
 export const hiraganaData: Kana[] = [
   // Basic vowels
   {
-    id: '1',
+    id: 'h1',
     character: 'あ',
     romaji: 'a',
     type: 'hiragana',
@@ -11,7 +11,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '2',
+    id: 'h2',
     character: 'い',
     romaji: 'i',
     type: 'hiragana',
@@ -19,7 +19,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '3',
+    id: 'h3',
     character: 'う',
     romaji: 'u',
     type: 'hiragana',
@@ -27,7 +27,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '4',
+    id: 'h4',
     character: 'え',
     romaji: 'e',
     type: 'hiragana',
@@ -35,7 +35,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '5',
+    id: 'h5',
     character: 'お',
     romaji: 'o',
     type: 'hiragana',
@@ -45,7 +45,7 @@ export const hiraganaData: Kana[] = [
 
   // K-series
   {
-    id: '6',
+    id: 'h6',
     character: 'か',
     romaji: 'ka',
     type: 'hiragana',
@@ -53,7 +53,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '7',
+    id: 'h7',
     character: 'き',
     romaji: 'ki',
     type: 'hiragana',
@@ -61,7 +61,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '8',
+    id: 'h8',
     character: 'く',
     romaji: 'ku',
     type: 'hiragana',
@@ -69,7 +69,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '9',
+    id: 'h9',
     character: 'け',
     romaji: 'ke',
     type: 'hiragana',
@@ -77,7 +77,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '10',
+    id: 'h10',
     character: 'こ',
     romaji: 'ko',
     type: 'hiragana',
@@ -87,7 +87,7 @@ export const hiraganaData: Kana[] = [
 
   // S-series
   {
-    id: '11',
+    id: 'h11',
     character: 'さ',
     romaji: 'sa',
     type: 'hiragana',
@@ -95,7 +95,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '12',
+    id: 'h12',
     character: 'し',
     romaji: 'shi',
     type: 'hiragana',
@@ -103,7 +103,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '13',
+    id: 'h13',
     character: 'す',
     romaji: 'su',
     type: 'hiragana',
@@ -111,7 +111,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '14',
+    id: 'h14',
     character: 'せ',
     romaji: 'se',
     type: 'hiragana',
@@ -119,7 +119,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '15',
+    id: 'h15',
     character: 'そ',
     romaji: 'so',
     type: 'hiragana',
@@ -129,7 +129,7 @@ export const hiraganaData: Kana[] = [
 
   // T-series
   {
-    id: '16',
+    id: 'h16',
     character: 'た',
     romaji: 'ta',
     type: 'hiragana',
@@ -137,7 +137,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '17',
+    id: 'h17',
     character: 'ち',
     romaji: 'chi',
     type: 'hiragana',
@@ -145,7 +145,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '18',
+    id: 'h18',
     character: 'つ',
     romaji: 'tsu',
     type: 'hiragana',
@@ -153,7 +153,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '19',
+    id: 'h19',
     character: 'て',
     romaji: 'te',
     type: 'hiragana',
@@ -161,7 +161,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '20',
+    id: 'h20',
     character: 'と',
     romaji: 'to',
     type: 'hiragana',
@@ -171,7 +171,7 @@ export const hiraganaData: Kana[] = [
 
   // N-series
   {
-    id: '21',
+    id: 'h21',
     character: 'な',
     romaji: 'na',
     type: 'hiragana',
@@ -179,7 +179,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '22',
+    id: 'h22',
     character: 'に',
     romaji: 'ni',
     type: 'hiragana',
@@ -187,7 +187,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '23',
+    id: 'h23',
     character: 'ぬ',
     romaji: 'nu',
     type: 'hiragana',
@@ -195,7 +195,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '24',
+    id: 'h24',
     character: 'ね',
     romaji: 'ne',
     type: 'hiragana',
@@ -203,7 +203,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '25',
+    id: 'h25',
     character: 'の',
     romaji: 'no',
     type: 'hiragana',
@@ -213,7 +213,7 @@ export const hiraganaData: Kana[] = [
 
   // H-series
   {
-    id: '26',
+    id: 'h26',
     character: 'は',
     romaji: 'ha',
     type: 'hiragana',
@@ -221,7 +221,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '27',
+    id: 'h27',
     character: 'ひ',
     romaji: 'hi',
     type: 'hiragana',
@@ -229,7 +229,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '28',
+    id: 'h28',
     character: 'ふ',
     romaji: 'fu',
     type: 'hiragana',
@@ -237,7 +237,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '29',
+    id: 'h29',
     character: 'へ',
     romaji: 'he',
     type: 'hiragana',
@@ -245,7 +245,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '30',
+    id: 'h30',
     character: 'ほ',
     romaji: 'ho',
     type: 'hiragana',
@@ -255,7 +255,7 @@ export const hiraganaData: Kana[] = [
 
   // M-series
   {
-    id: '31',
+    id: 'h31',
     character: 'ま',
     romaji: 'ma',
     type: 'hiragana',
@@ -263,7 +263,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '32',
+    id: 'h32',
     character: 'み',
     romaji: 'mi',
     type: 'hiragana',
@@ -271,7 +271,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '33',
+    id: 'h33',
     character: 'む',
     romaji: 'mu',
     type: 'hiragana',
@@ -279,7 +279,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '34',
+    id: 'h34',
     character: 'め',
     romaji: 'me',
     type: 'hiragana',
@@ -287,7 +287,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '35',
+    id: 'h35',
     character: 'も',
     romaji: 'mo',
     type: 'hiragana',
@@ -297,7 +297,7 @@ export const hiraganaData: Kana[] = [
 
   // Y-series
   {
-    id: '36',
+    id: 'h36',
     character: 'や',
     romaji: 'ya',
     type: 'hiragana',
@@ -305,7 +305,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '37',
+    id: 'h37',
     character: 'ゆ',
     romaji: 'yu',
     type: 'hiragana',
@@ -313,7 +313,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '38',
+    id: 'h38',
     character: 'よ',
     romaji: 'yo',
     type: 'hiragana',
@@ -323,7 +323,7 @@ export const hiraganaData: Kana[] = [
 
   // R-series
   {
-    id: '39',
+    id: 'h39',
     character: 'ら',
     romaji: 'ra',
     type: 'hiragana',
@@ -331,7 +331,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '40',
+    id: 'h40',
     character: 'り',
     romaji: 'ri',
     type: 'hiragana',
@@ -339,7 +339,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '41',
+    id: 'h41',
     character: 'る',
     romaji: 'ru',
     type: 'hiragana',
@@ -347,7 +347,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '42',
+    id: 'h42',
     character: 'れ',
     romaji: 're',
     type: 'hiragana',
@@ -355,7 +355,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '43',
+    id: 'h43',
     character: 'ろ',
     romaji: 'ro',
     type: 'hiragana',
@@ -365,7 +365,7 @@ export const hiraganaData: Kana[] = [
 
   // W-series and N
   {
-    id: '44',
+    id: 'h44',
     character: 'わ',
     romaji: 'wa',
     type: 'hiragana',
@@ -373,7 +373,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '45',
+    id: 'h45',
     character: 'を',
     romaji: 'wo',
     type: 'hiragana',
@@ -381,7 +381,7 @@ export const hiraganaData: Kana[] = [
     incorrectCount: 0,
   },
   {
-    id: '46',
+    id: 'h46',
     character: 'ん',
     romaji: 'n',
     type: 'hiragana',

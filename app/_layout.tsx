@@ -1,3 +1,4 @@
+import React from 'react';
 import { Tabs } from 'expo-router';
 import { Provider } from 'react-redux';
 import { store } from '../src/store';
@@ -6,8 +7,14 @@ import { hiraganaData } from '../src/data/hiragana';
 import { katakanaData } from '../src/data/katakana';
 import { hp, fontSize } from '../src/utils/responsive';
 import { colors } from '../src/utils/colors';
+import { loadStoredData } from '../src/store/slices/studySessionSlice';
 
 export default function RootLayout() {
+  // Load stored data when app starts
+  React.useEffect(() => {
+    store.dispatch(loadStoredData());
+  }, []);
+
   return (
     <Provider store={store}>
       <Tabs
