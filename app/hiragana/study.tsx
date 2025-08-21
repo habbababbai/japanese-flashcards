@@ -73,7 +73,7 @@ export default function HiraganaStudyScreen() {
       // End session in Redux
       dispatch(
         endSession({
-          endTime: new Date(),
+          endTime: new Date().toISOString(),
           progress: finalProgress,
         })
       );
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize.md,
   },
   safeArea: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.neutral.white,
     flex: 1,
   },
   titleText: {

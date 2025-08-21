@@ -83,7 +83,7 @@ const studySessionSlice = createSlice({
 
     endSession: (
       state,
-      action: PayloadAction<{ endTime: Date; progress: StudyProgress[] }>
+      action: PayloadAction<{ endTime: string; progress: StudyProgress[] }>
     ) => {
       if (state.currentSession) {
         const { endTime, progress } = action.payload;
@@ -92,7 +92,7 @@ const studySessionSlice = createSlice({
 
         const completedSession: StudySession = {
           ...state.currentSession,
-          endTime: endTime.toISOString(),
+          endTime: endTime,
           cardsReviewed: progress.length,
           correctAnswers: correctCount,
           incorrectAnswers: incorrectCount,

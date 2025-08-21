@@ -75,52 +75,10 @@ export default function StatsScreen() {
       };
     });
 
-    // Filter out characters with no practice, then sort by type, frequency, and groups
+    // Filter out characters with no practice, then sort by frequency only
     return allProgressData
       .filter(item => item.total > 0) // Only show practiced characters
-      .sort((a, b) => {
-        // First sort by type (hiragana before katakana)
-        if (a.type !== b.type) {
-          return a.type === 'hiragana' ? -1 : 1;
-        }
-
-        // Then sort by total attempts (most studied first)
-        if (b.total !== a.total) {
-          return b.total - a.total;
-        }
-
-        // If same total, sort by character groups
-        const getGroupOrder = (romaji: string) => {
-          const firstChar = romaji.charAt(0);
-          const groupOrder = [
-            'a',
-            'i',
-            'u',
-            'e',
-            'o',
-            'k',
-            's',
-            't',
-            'n',
-            'h',
-            'm',
-            'y',
-            'r',
-            'w',
-          ];
-          return groupOrder.indexOf(firstChar);
-        };
-
-        const aGroupOrder = getGroupOrder(a.romaji);
-        const bGroupOrder = getGroupOrder(b.romaji);
-
-        if (aGroupOrder !== bGroupOrder) {
-          return aGroupOrder - bGroupOrder;
-        }
-
-        // If same group, sort by romaji
-        return a.romaji.localeCompare(b.romaji);
-      });
+      .sort((a, b) => b.total - a.total); // Sort by frequency (most studied first)
   }, [kanaProgress]);
 
   if (isLoading) {
