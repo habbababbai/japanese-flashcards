@@ -8,12 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Kana } from '../types';
-import {
-  spacing,
-  fontSize,
-  screenWidth,
-  screenHeight,
-} from '../utils/responsive';
+import { spacing, fontSize, cardDimensions } from '../utils/responsive';
 import { colors } from '../utils/colors';
 
 interface FlashcardProps {
@@ -209,20 +204,20 @@ export const Flashcard: React.FC<FlashcardProps> = ({
 const styles = StyleSheet.create({
   answerButton: {
     alignItems: 'center',
-    borderRadius: 16,
+    borderRadius: spacing.md,
     elevation: 8,
     flex: 1,
     justifyContent: 'center',
-    minHeight: 56,
+    minHeight: spacing.xxl,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
     shadowColor: colors.shadow.medium,
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: spacing.xs,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 6,
+    shadowRadius: spacing.sm,
   },
   answerButtonText: {
     color: colors.text.inverse,
@@ -241,28 +236,29 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     backfaceVisibility: 'hidden',
-    borderRadius: 20,
+    borderRadius: spacing.lg,
     elevation: 8,
     height: '100%',
     justifyContent: 'center',
-    padding: 28,
+    padding: spacing.xl,
     position: 'absolute',
     shadowColor: colors.shadow.medium,
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: spacing.xs,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowRadius: spacing.md,
     width: '100%',
   },
   cardBack: {
     backgroundColor: colors.secondary.main,
   },
   cardContainer: {
-    height: Math.min(screenHeight * 0.5, 400),
+    alignSelf: 'center',
+    height: cardDimensions.height,
     position: 'relative',
-    width: Math.min(screenWidth * 0.9, 350),
+    width: cardDimensions.width,
   },
   cardFront: {
     backgroundColor: colors.primary.main,
@@ -271,12 +267,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
+    minHeight: '100%',
     padding: spacing.md,
   },
   correctButton: {
     backgroundColor: colors.success.main,
     borderColor: colors.success.dark,
-    borderWidth: 2,
+    borderWidth: spacing.xs / 4,
   },
   hidden: {
     opacity: 0,
@@ -291,7 +288,7 @@ const styles = StyleSheet.create({
   incorrectButton: {
     backgroundColor: colors.error.main,
     borderColor: colors.error.dark,
-    borderWidth: 2,
+    borderWidth: spacing.xs / 4,
   },
   kanaText: {
     color: colors.text.inverse,

@@ -17,7 +17,7 @@ function TabLayout() {
 
   return (
     <Tabs
-      screenOptions={({ route }) => ({
+      screenOptions={() => ({
         tabBarActiveTintColor: colors.primary.main,
         tabBarInactiveTintColor: colors.text.tertiary,
         tabBarStyle: {

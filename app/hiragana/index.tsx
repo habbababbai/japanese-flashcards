@@ -161,7 +161,7 @@ export default function HiraganaSettingsScreen() {
 const styles = StyleSheet.create({
   characterCountButton: {
     backgroundColor: colors.neutral.gray[200],
-    borderRadius: 20,
+    borderRadius: spacing.lg,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
   },
@@ -195,13 +195,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: colors.border.light,
     borderBottomWidth: 1,
+    minHeight: spacing.xxl * 2,
     paddingBottom: spacing.md,
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl,
   },
   optionButton: {
     backgroundColor: colors.neutral.gray[100],
-    borderRadius: 12,
+    borderRadius: spacing.md,
     padding: spacing.lg,
   },
   optionButtonActive: {
@@ -226,6 +227,8 @@ const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: colors.neutral.white,
     flex: 1,
+    // Prevent layout shift by ensuring consistent positioning
+    minHeight: '100%',
   },
   sectionTitle: {
     fontSize: fontSize.lg,
@@ -235,7 +238,7 @@ const styles = StyleSheet.create({
   startButton: {
     alignItems: 'center',
     backgroundColor: colors.primary.main,
-    borderRadius: 12,
+    borderRadius: spacing.md,
     paddingVertical: spacing.lg,
   },
   startButtonDisabled: {

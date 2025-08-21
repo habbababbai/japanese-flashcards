@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Flashcard } from './Flashcard';
 import { Kana, StudyProgress, StudyOptions } from '../types';
@@ -172,34 +179,38 @@ export function StudyScreen({
 
   if (!currentKana) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.loadingText}>Loading...</Text>
-      </View>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-        <Text style={styles.closeButtonText}>✕</Text>
-      </TouchableOpacity>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+          <Text style={styles.closeButtonText}>✕</Text>
+        </TouchableOpacity>
 
-      <View style={styles.content}>
-        <Flashcard kana={currentKana} onAnswer={handleAnswer} />
+        <View style={styles.content}>
+          <Flashcard kana={currentKana} onAnswer={handleAnswer} />
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   closeButton: {
     alignItems: 'center',
-    height: 32,
+    height: spacing.xl,
     justifyContent: 'center',
     position: 'absolute',
-    right: 20,
-    top: 50,
-    width: 32,
+    right: spacing.lg,
+    top: spacing.xxl,
+    width: spacing.xl,
     zIndex: 1,
   },
   closeButtonText: {
@@ -210,17 +221,24 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.neutral.white,
     flex: 1,
+    // Prevent layout shift by ensuring consistent positioning
+    minHeight: '100%',
   },
   content: {
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
+    minHeight: '100%',
     paddingHorizontal: spacing.lg,
   },
   loadingText: {
     color: colors.text.secondary,
     fontSize: fontSize.lg,
-    marginTop: 100,
+    marginTop: spacing.xxl * 2,
     textAlign: 'center',
+  },
+  safeArea: {
+    backgroundColor: colors.neutral.white,
+    flex: 1,
   },
 });
